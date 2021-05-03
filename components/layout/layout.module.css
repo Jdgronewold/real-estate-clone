@@ -1,0 +1,9 @@
+.layoutContainer {
+  height: 100vh;
+
+}
+
+.header {
+  height: 60px;
+  display: flex;
+}

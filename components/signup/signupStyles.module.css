@@ -1,0 +1,82 @@
+.formContainer {
+  height: calc(100vh - 60px);
+  width: 100vw;
+  background-image: url("/signup.jpeg");
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.formWrapper {
+  width: 50%;
+  background: white;
+  padding: 2rem 4rem;
+}
+
+.formHeader {
+  margin: 2rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+  
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: fit-content;
+}
+  
+.formGroup label {
+  font-size: 20px;
+}
+    
+.formGroup input, .formGroup select {
+  margin-top: 6px;
+  min-width: 18em;
+  height: 37px;
+  padding: 0px 10px;
+  font-size: 16px;
+  font-family: "Open Sans", sans-serif;
+  background-color: #f3f3f3;
+  border: 0;
+  border-radius: 4px;
+  margin-bottom: 31px;
+  transition: all 250ms ease-in-out;
+}
+
+.formGroup input:hover {
+  background-color: #ffffff;
+  box-shadow: 0px 0px 14px 0.3px #0e81ce96;
+}
+  
+.formGroup input:focus {
+  outline: none;
+  box-shadow: 0px 0px 12px 0.8px #3474dbb2;
+}
+
+.formGroup button {
+  margin-top: 6px;
+  min-width: 18em;
+  height: 37px;
+  padding: 0px 10px;
+  font-size: 16px;
+  font-family: "Open Sans", sans-serif;
+  border: 0;
+  border-radius: 4px;
+  margin-bottom: 31px;
+  background-color: purple;
+  border: purple; 
+  color: white;
+}
+
+.formGroup button:hover {
+  cursor: pointer;
+  background-color: plum;
+}

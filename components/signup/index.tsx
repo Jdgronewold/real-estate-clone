@@ -1,0 +1,114 @@
+import React from 'react'
+import { useForm } from "react-hook-form"
+import styles from './signupStyles.module.css'
+import firebase from 'firebase'
+import app from 'firebase/app'
+import Link from 'next/link'
+
+export enum UserRoles {
+  ADMIN = "ADMIN",
+  ClIENT = "CLIENT",
+  REALTOR = "REALTOR"
+}
+
+interface RegisterData {
+  firstName: string
+  lastName: string
+  email: string,
+  passwordOne: string
+  passwordTwo: string
+  role: UserRoles
+}
+
+export default function Signup() {
+  const { register, handleSubmit, formState: { errors } } = useForm()
+
+  const onSubmit = async (data: RegisterData) => {
+    console.log(data);
+    const { firstName, lastName, email, role} = data
+    
+    const authUser = await app.auth().createUserWithEmailAndPassword(data.email, data.passwordOne)
+    const user = await firebase.database().ref(`users/${authUser.user.uid}`).set({
+      firstName,
+      lastName,
+      email,
+      role,
+      likedApartments: []
+    })
+    console.log(user);
+    
+    
+  }
+
+  return (
+    <div className={styles.formContainer}>
+      <div className={styles.formWrapper}> 
+        <div className={styles.formHeader}>
+          <h1> Register </h1>
+          <div>
+            <span>Already have an account? </span><Link href="/login">Sign in</Link>
+          </div>
+        </div>
+        <form className={styles.form} noValidate onSubmit={handleSubmit(onSubmit)}>
+          <div className={styles.formGroup}>
+            <input
+                name="firstName"
+                {...register('firstName')}
+                type="text"
+                placeholder="First Name"
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <input
+              name="lastName"
+              {...register('lastName')}
+              type="text"
+              placeholder="Last Name"
+            />
+          </div>
+      
+          <div className={styles.formGroup}>
+            <input
+              name="email"
+              {...register('email')}
+              type="text"
+              placeholder="Email Address"
+            />
+          </div>
+      
+          <div className={styles.formGroup}>
+            <input
+              name="passwordOne"
+              {...register('passwordOne')}
+              type="password"
+              placeholder="Password"
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <input
+              name="passwordTwo"
+              {...register('passwordTwo')}
+              type="password"
+              placeholder="Confirm Password"
+            />
+          </div>
+      
+          <div className={styles.formGroup}>
+            <select {...register("role")}>
+              <option value={UserRoles.ClIENT}>Client</option>
+              <option value={UserRoles.REALTOR}>Realtor</option>
+              <option value={UserRoles.ADMIN}>Admin</option>
+            </select>
+          </div>
+          <div className={styles.formGroup}>
+            <button type="submit">
+              Sign Up
+            </button>
+          </div>
+
+          {errors && <p>{errors.message}</p>}
+        </form>
+      </div>
+    </div>
+  )
+}
