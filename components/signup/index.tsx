@@ -1,9 +1,10 @@
 import React from 'react'
 import { useForm } from "react-hook-form"
-import styles from './signupStyles.module.css'
+import styles from '../../styles/forms.module.css'
 import firebase from 'firebase'
 import app from 'firebase/app'
 import Link from 'next/link'
+import { makeAuthedPostRequest } from '../../utils/addAuth'
 
 export enum UserRoles {
   ADMIN = "ADMIN",
@@ -24,26 +25,24 @@ export default function Signup() {
   const { register, handleSubmit, formState: { errors } } = useForm()
 
   const onSubmit = async (data: RegisterData) => {
-    console.log(data);
     const { firstName, lastName, email, role} = data
     
-    const authUser = await app.auth().createUserWithEmailAndPassword(data.email, data.passwordOne)
-    const user = await firebase.database().ref(`users/${authUser.user.uid}`).set({
+    const { user } = await app.auth().createUserWithEmailAndPassword(data.email, data.passwordOne)
+    await makeAuthedPostRequest(user, '/api/set-role', { role })
+    await firebase.database().ref(`users/${user.uid}`).set({
       firstName,
       lastName,
       email,
       role,
       likedApartments: []
     })
-    console.log(user);
-    
     
   }
 
   return (
     <div className={styles.formContainer}>
       <div className={styles.formWrapper}> 
-        <div className={styles.formHeader}>
+        <div className={styles.formHeaderWithSub}>
           <h1> Register </h1>
           <div>
             <span>Already have an account? </span><Link href="/login">Sign in</Link>

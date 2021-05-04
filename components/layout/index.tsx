@@ -18,4 +18,6 @@ const Layout: React.FC = (props) => {
 
 }
 
-export default withAuthUser()(Layout)
+export default withAuthUser({
+  whenUnauthedBeforeInit: null
+})(Layout)

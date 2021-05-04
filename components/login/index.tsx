@@ -1,6 +1,6 @@
 import React from 'react'
 import { useForm } from "react-hook-form"
-import styles from '../signup/signupStyles.module.css'
+import styles from '../../styles/forms.module.css'
 import app from 'firebase/app'
 import Link from 'next/link'
 
@@ -23,7 +23,7 @@ export default function Login() {
   return (
     <div className={styles.formContainer}>
       <div className={styles.formWrapper}> 
-        <div className={styles.formHeader}>
+        <div className={styles.formHeaderWithSub}>
           <h1> Login </h1>
           <div>
             <span>Need to create an account? </span><Link href="/register">Click here</Link>

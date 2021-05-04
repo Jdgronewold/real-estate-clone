@@ -14,9 +14,16 @@
   width: 50%;
   background: white;
   padding: 2rem 4rem;
+  max-height: 90%;
+  overflow-y: scroll;
 }
 
 .formHeader {
+  display: flex;
+  justify-content: center;
+}
+
+.formHeaderWithSub {
   margin: 2rem;
 }
 
@@ -37,9 +44,10 @@
   font-size: 20px;
 }
     
-.formGroup input, .formGroup select {
+.formGroup input, .formGroup select, .formGroup textarea {
   margin-top: 6px;
   min-width: 18em;
+  max-width: 18em;
   height: 37px;
   padding: 0px 10px;
   font-size: 16px;
@@ -51,12 +59,17 @@
   transition: all 250ms ease-in-out;
 }
 
+.formGroup textarea {
+  height: 10em;
+  resize: none;
+}
+
 .formGroup input:hover {
   background-color: #ffffff;
   box-shadow: 0px 0px 14px 0.3px #0e81ce96;
 }
   
-.formGroup input:focus {
+.formGroup input:focus, .formGroup textarea:focus {
   outline: none;
   box-shadow: 0px 0px 12px 0.8px #3474dbb2;
 }

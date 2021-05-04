@@ -1,8 +1,9 @@
 import { useAuthUser, withAuthUser, AuthAction } from 'next-firebase-auth';
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import Header from '../components/Header'
 import Layout from '../components/layout'
+import Map from '../components/map'
+import { ApartmentList } from '../components/apartments'
 
 const MyLoader = () => <div>Loading...</div>
 
@@ -16,11 +17,8 @@ const Home = () => {
           <title>Toptal Real Estate</title>
           
         </Head>
-
-        <main className={styles.main}>
-          <Header email={AuthUser.email} signOut={AuthUser.signOut} />
-        </main>
-
+          <Map />
+          <ApartmentList />
       </div>
     </Layout>
   )

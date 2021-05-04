@@ -18,6 +18,7 @@
     "isolatedModules": true,
     "jsx": "preserve"
   },
+  "types": ["googlemaps"],
   "include": [
     "next-env.d.ts",
     "**/*.ts",
