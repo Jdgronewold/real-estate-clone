@@ -1,6 +1,6 @@
 .apartmentList {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
   grid-gap: 1rem;
   height: calc(100vh - 80px);
   overflow-y: scroll;
@@ -17,12 +17,23 @@
   padding: 0.3rem;
 }
 
-.apartmentCardHeader {
-font-size: 1.2em;
-display: flex;
-justify-content: space-between;
+.apartmentCard:hover {
+  cursor: pointer;
+  border: 1px solid magenta;
 }
 
+.apartmentCardHeader {
+  font-size: 1.2em;
+  display: flex;
+  justify-content: space-between;
+}
+
+.apartmentCardHeader > div:first-child {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 70%;
+}
 .apartmentCardFooter {
   font-size: 0.8em;
 }

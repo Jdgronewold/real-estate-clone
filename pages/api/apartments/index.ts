@@ -1,6 +1,7 @@
 import { verifyIdToken } from "next-firebase-auth";
 import firebaseAdmin from "firebase-admin";
 import { UserRoles } from '../../../types';
+import { parseApartments } from "../../../utils/parseApartments";
 
 const handler = async (req, res) => {
   try {
@@ -16,7 +17,7 @@ const handler = async (req, res) => {
         return snapshot.val();
       });
 
-    const apartments = Object.keys(apartmentsObject).map((key) => apartmentsObject[key])
+    const apartments = parseApartments(apartmentsObject)
 
     if (role === UserRoles.ADMIN || role === UserRoles.REALTOR) {
       return res.status(200).json({ apartments });

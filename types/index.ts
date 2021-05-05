@@ -7,7 +7,8 @@ export interface Apartment {
   numRooms: number,
   realtor: string,
   isRented: boolean,
-  dateAdded: Date
+  dateAdded: Date,
+  uid: string
 }
 
 export enum UserRoles {

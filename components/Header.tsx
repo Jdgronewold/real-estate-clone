@@ -72,7 +72,7 @@ const styles = {
 const Header = ({ email, signOut, dbUser }) => {
   return (
     <div style={styles.container}>
-      <Link href="/"><h1>Toptal Real Estate</h1></Link>
+      <Link href="/"><a><h1>Toptal Real Estate</h1></a></Link>
       {dbUser && email ? (
         <Menu styles={burgerStyles} right>
           <div>

@@ -1,5 +1,6 @@
 import React from 'react';
-import { UserContext, User } from './user'
+import { User } from '../../types';
+import { UserContext } from './user'
 
 export interface WithDbUser {
   dbUser: User
