@@ -1,0 +1,37 @@
+.apartmentList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-gap: 1rem;
+  height: calc(100vh - 80px);
+  overflow-y: scroll;
+  width: 40%;
+  margin: 0;
+}
+
+.apartmentCard {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid grey;
+  border-radius: 8px;
+  padding: 0.3rem;
+}
+
+.apartmentCardHeader {
+font-size: 1.2em;
+display: flex;
+justify-content: space-between;
+}
+
+.apartmentCardFooter {
+  font-size: 0.8em;
+}
+
+.apartmentCard > div {
+  padding: 0.3rem;
+}
+
+.apartmentCard span {
+  margin-right: 10px;
+  color: grey;
+}

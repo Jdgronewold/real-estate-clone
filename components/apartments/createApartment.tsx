@@ -6,7 +6,7 @@ import styles from "../../styles/forms.module.css";
 import { withDbUser } from '../../state/user'
 import { WithDbUser } from '../../state/user/context'
 import { compose } from 'recompose';
-import { makeAuthedPostRequest } from "../../utils/addAuth";
+import { makeAuthedPostRequest } from "../../utils/axiosUtils";
 
 // name, description, floor area size, price per month, number of rooms, valid geolocation coordinates, date added and an associated realtor.
 
@@ -28,9 +28,10 @@ const CreateApartment = (props: WithDbUser) => {
 
   const onSubmit = async (data: CreateApartmentData) => {
 
-    await makeAuthedPostRequest(authUser, '/api/apartment/create', {
+    await makeAuthedPostRequest(authUser, '/api/apartments/create', {
       ...data,
-      dateAdded: new Date().toString()
+      dateAdded: new Date().toString(),
+      isRented: false
     })
 
     router.push('/')    

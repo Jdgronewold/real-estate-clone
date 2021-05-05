@@ -1,6 +1,6 @@
 import { verifyIdToken } from 'next-firebase-auth'
 import firebaseAdmin from 'firebase-admin'
-import { UserRoles } from '../../../components/signup';
+import { UserRoles } from '../../../types';
 
 const handler = async (req, res) => {
   try {

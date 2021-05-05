@@ -13,10 +13,8 @@ export default function Login() {
   const { register, handleSubmit, formState: { errors } } = useForm()
 
   const onSubmit = async (data: LoginData) => {
-    console.log(data);
-    
+
     const authUser = await app.auth().signInWithEmailAndPassword(data.email, data.password)
-    console.log(authUser);
     
   }
 

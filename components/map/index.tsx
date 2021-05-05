@@ -11,7 +11,6 @@ interface MapProps {
 }
 
 const gmapKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY
-console.log(gmapKey);
 
 
 const Map: React.FC<MapProps> = ({ shouldAllowSearch = false, shouldShowPlanner = false, updateContext }) => {
@@ -51,7 +50,6 @@ const Map: React.FC<MapProps> = ({ shouldAllowSearch = false, shouldShowPlanner 
           defaultCenter={{ lat: 40.0150, lng: -105.2705}}
           yesIWantToUseGoogleMapApiInternals
           onGoogleApiLoaded={(gmaps) => {
-            console.log('hit here');
             
             mapsApi.current = gmaps.maps
             map.current = gmaps.map

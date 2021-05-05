@@ -6,3 +6,8 @@ export const makeAuthedPostRequest = async <T>(user: AuthUser | firebase.User, e
   const token = await user.getIdToken()
   return axios.post(endpoint, body, { headers: { Authorization: token || 'unauthenticated' }})
 }
+
+export const makeAuthedGetRequest = async <T>(user: AuthUser | firebase.User, endpoint: string) => {
+  const token = await user.getIdToken()
+  return axios.get(endpoint, { headers: { Authorization: token || 'unauthenticated' }})
+} 

@@ -4,13 +4,8 @@ import styles from '../../styles/forms.module.css'
 import firebase from 'firebase'
 import app from 'firebase/app'
 import Link from 'next/link'
-import { makeAuthedPostRequest } from '../../utils/addAuth'
-
-export enum UserRoles {
-  ADMIN = "ADMIN",
-  ClIENT = "CLIENT",
-  REALTOR = "REALTOR"
-}
+import { makeAuthedPostRequest } from '../../utils/axiosUtils'
+import { UserRoles } from '../../types'
 
 interface RegisterData {
   firstName: string

@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { slide as Menu } from "react-burger-menu";
 import { withDbUser } from "../state/user";
-import { UserRoles } from "./signup";
+import { UserRoles } from "../types";
 
 const burgerStyles = {
   bmBurgerButton: {
@@ -70,11 +70,9 @@ const styles = {
 };
 
 const Header = ({ email, signOut, dbUser }) => {
-  console.log(dbUser);
-  
   return (
     <div style={styles.container}>
-      <h1>Toptal Real Estate</h1>
+      <Link href="/"><h1>Toptal Real Estate</h1></Link>
       {dbUser && email ? (
         <Menu styles={burgerStyles} right>
           <div>
