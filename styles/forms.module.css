@@ -44,7 +44,7 @@
   font-size: 20px;
 }
     
-.formGroup input, .formGroup select, .formGroup textarea {
+.formGroup input:not([type=radio]), .formGroup select, .formGroup textarea {
   margin-top: 6px;
   min-width: 18em;
   max-width: 18em;
@@ -57,6 +57,17 @@
   border-radius: 4px;
   margin-bottom: 15px;
   transition: all 250ms ease-in-out;
+}
+.formGroup > label {
+  margin-top: 6px;
+  min-width: 18em;
+  max-width: 18em;
+  height: 37px;
+  padding: 0px 10px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .formGroup textarea {

@@ -7,7 +7,6 @@ import initAuth from '../../utils/initAuth'
 initAuth()
 
 const ApartmentPage: React.FC<{apartment: Apartment}> = ({ apartment}) => {
-  console.log(apartment);
   
   return (
     <>

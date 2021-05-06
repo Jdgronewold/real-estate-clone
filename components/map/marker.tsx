@@ -1,11 +1,10 @@
 import React, { useContext } from "react";
 
 interface MarkerProps {
-  lat: number
-  lng: number 
-  place: google.maps.places.PlaceResult
+  lat: number;
+  lng: number;
 }
 
 export const Marker = (props: MarkerProps) => {
-  return <div></div>
-}
+  return <div>HELLO</div>;
+};

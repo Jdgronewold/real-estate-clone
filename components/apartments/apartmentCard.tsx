@@ -20,7 +20,7 @@ export const ApartmentCard = ({ apartment}: { apartment: Apartment}) => {
         <span>{apartment.numRooms} Rooms</span>
         <span>{apartment.floorSize} Sq. Ft.</span>
       </div>
-      <div><span>Address Here</span></div>
+      <div><span>{apartment.address}</span></div>
       <div className={styles.apartmentCardFooter}>
         <span>{apartment.realtor}</span>
       </div>

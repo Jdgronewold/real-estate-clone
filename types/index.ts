@@ -8,6 +8,8 @@ export interface Apartment {
   realtor: string,
   isRented: boolean,
   dateAdded: Date,
+  address: string,
+  latLng: string
   uid: string
 }
 

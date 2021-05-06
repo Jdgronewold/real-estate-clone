@@ -17,6 +17,13 @@ const handler = async (req, res) => {
         return snapshot.val();
       });
 
+    if (!apartmentsObject) {
+      return res
+      .status(200)
+      .json({
+        apartments: []
+      })
+    }
     const apartments = parseApartments(apartmentsObject)
 
     if (role === UserRoles.ADMIN || role === UserRoles.REALTOR) {

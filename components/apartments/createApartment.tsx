@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from 'next/router'
 import { useAuthUser, withAuthUser } from 'next-firebase-auth'
@@ -7,6 +7,8 @@ import { withDbUser } from '../../state/user'
 import { WithDbUser } from '../../state/user/context'
 import { compose } from 'recompose';
 import { makeAuthedPostRequest } from "../../utils/axiosUtils";
+import { GmapContext } from '../map/mapLoader'
+import util from 'util'
 
 // name, description, floor area size, price per month, number of rooms, valid geolocation coordinates, date added and an associated realtor.
 
@@ -17,21 +19,67 @@ interface CreateApartmentData {
   pricePerMonth: number,
   numRooms: number,
   realtor: string,
+  location: string
   // imageFile: FileList
 }
 
 const CreateApartment = (props: WithDbUser) => {
+
+  const { mapsLoaded } = useContext(GmapContext)
   
+  const geoencoder = useRef<google.maps.Geocoder>(null)
+  const searchBox = useRef<google.maps.places.SearchBox>(null)
+  const searchBoxRef = useRef<HTMLInputElement>()
   const { register, handleSubmit } = useForm();
   const authUser = useAuthUser()
   const router = useRouter()
 
+  useEffect(() => {    
+    if (mapsLoaded) {
+      geoencoder.current = new google.maps.Geocoder()
+      searchBox.current = new google.maps.places.SearchBox(searchBoxRef.current)
+      // searchBox.current.addListener('places_changed', onPlacesChanged)
+    }
+  }, [mapsLoaded])
+
   const onSubmit = async (data: CreateApartmentData) => {
+    const locactionObject = { latLng: '', address: '' }
+    if (data.location === 'address') {
+      const selected = searchBox.current.getPlaces();
+      if (selected) {
+        const { 0: place } = selected;
+        locactionObject.latLng = `${place.geometry.location.lat()}, ${place.geometry.location.lng()}`
+        locactionObject.address = place.formatted_address
+      }
+    } else {
+      const latLngStr = searchBoxRef.current.value.split(",", 2)
+      const location = { location: { lat: parseFloat(latLngStr[0]), lng: parseFloat(latLngStr[1]) }}
+      locactionObject.latLng = searchBoxRef.current.value
+      
+      const addresses = await new Promise<google.maps.GeocoderResult[]>((resolve, reject) => {
+        (geoencoder.current.geocode(location, (result) => {
+          resolve(result)
+        }))
+      })
+      console.log(addresses);
+      
+      if (addresses.length) {
+        locactionObject.address = addresses[0].formatted_address
+      }
+    }
+    
+    console.log({
+      ...data,
+      dateAdded: new Date().toString(),
+      isRented: false
+    });
+    
 
     await makeAuthedPostRequest(authUser, '/api/apartments/create', {
       ...data,
       dateAdded: new Date().toString(),
-      isRented: false
+      isRented: false,
+      ...locactionObject
     })
 
     router.push('/')    
@@ -77,6 +125,36 @@ const CreateApartment = (props: WithDbUser) => {
               {...register("numRooms")}
               type="number"
               placeholder="Number of Rooms"
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label>
+              Use latitude and longitude: 
+              <input
+                  name="location"
+                  type="radio"
+                  value="geolocation"
+                  {...register("location")}
+              />
+            </label>
+            <label>
+              Use address:
+              <input
+                name="location"
+                type="radio"
+                value="address"
+                {...register("location")}
+              />
+            </label>
+          </div>
+          <div className={styles.formGroup}>
+            <input
+              ref={searchBoxRef}
+              name="locationVal"
+              autoComplete="chrome-off"
+              // {...register("locationVal")}
+              type="text"
+              placeholder="Location"
             />
           </div>
           {/* <div className={styles.formGroup}>
