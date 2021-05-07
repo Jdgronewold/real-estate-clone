@@ -16,7 +16,7 @@ interface CreateApartmentData {
   numRooms: number,
   realtor: string,
   location: string
-  // imageFile: FileList
+  imageFile: FileList
 }
 
 const CreateApartment = () => {
@@ -38,18 +38,18 @@ const CreateApartment = () => {
   }, [mapsLoaded])
 
   const onSubmit = async (data: CreateApartmentData) => {
-    const locactionObject = { latLng: '', address: '' }
+    const locationObject = { latLng: '', address: '' }
     if (data.location === 'address') {
       const selected = searchBox.current.getPlaces();
       if (selected) {
         const { 0: place } = selected;
-        locactionObject.latLng = `${place.geometry.location.lat()}, ${place.geometry.location.lng()}`
-        locactionObject.address = place.formatted_address
+        locationObject.latLng = `${place.geometry.location.lat()}, ${place.geometry.location.lng()}`
+        locationObject.address = place.formatted_address
       }
     } else {
       const latLngStr = searchBoxRef.current.value.split(",", 2)
       const location = { location: { lat: parseFloat(latLngStr[0]), lng: parseFloat(latLngStr[1]) }}
-      locactionObject.latLng = searchBoxRef.current.value
+      locationObject.latLng = searchBoxRef.current.value
       
       const addresses = await new Promise<google.maps.GeocoderResult[]>((resolve, reject) => {
         (geoencoder.current.geocode(location, (result) => {
@@ -57,18 +57,24 @@ const CreateApartment = () => {
         }))
       })      
       if (addresses.length) {
-        locactionObject.address = addresses[0].formatted_address
+        locationObject.address = addresses[0].formatted_address
       }
     }
-    
-    await makeAuthedPostRequest(authUser, '/api/apartments/create', {
-      ...data,
-      dateAdded: new Date().toString(),
-      isRented: false,
-      ...locactionObject
-    })
 
-    router.push('/')    
+    const form = new FormData()
+    Object.keys({...data, ...locationObject }).forEach((key) => {
+      if (key !== 'imageFile') {
+        form.append(key, data[key] || locationObject[key])
+      }
+    })
+    form.append('imageFile', data.imageFile[0])
+    
+    try {
+      await makeAuthedPostRequest(authUser, '/api/apartments/create', form)
+      router.push("/")
+    } catch (e) {
+      console.log(e.response.data)
+    }
 
   }
 
@@ -144,14 +150,14 @@ const CreateApartment = () => {
               placeholder="Location"
             />
           </div>
-          {/* <div className={styles.formGroup}>
+          <div className={styles.formGroup}>
             <input
               name="imageFile"
               {...register("imageFile")}
               type="file"
               placeholder="Load Image"
             />
-          </div> */}
+          </div>
           <div className={styles.formGroup}>
             <input
               name="realtor"

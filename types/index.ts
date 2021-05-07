@@ -11,6 +11,7 @@ export interface Apartment {
   address: string,
   latLng: string
   uid: string
+  imageUrl: string
 }
 
 export enum UserRoles {

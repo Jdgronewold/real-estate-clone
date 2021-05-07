@@ -1,26 +1,64 @@
 import { verifyIdToken } from 'next-firebase-auth'
 import firebaseAdmin from 'firebase-admin'
-import { UserRoles } from '../../../types';
+import { Apartment, UserRoles } from '../../../types';
+import formidable from 'formidable'
+var cloudinary = require('cloudinary').v2;
+import {UploadApiResponse } from 'cloudinary'
+import fs from 'fs'
+
+
+const cloudConfig = {
+  cloudName: 'toptalRealEstate',
+  apiKey: process.env.CLOUDINARY_API,
+  apiSecret: process.env.CLOUDINARY_SECRET
+}
+cloudinary.config(cloudConfig)
+
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+}
 
 const handler = async (req, res) => {
   try {
     const user = await verifyIdToken(req.headers.authorization)
     const userRecord = await firebaseAdmin.auth().getUser(user.id)
     const { role } = userRecord.customClaims
-    
+
     if ( role === UserRoles.ADMIN || role === UserRoles.REALTOR) {
-      const newApartmentRef = await firebaseAdmin.database().ref('apartments').push({
-        ...req.body
+      const form = new formidable.IncomingForm();
+      const data = await new Promise<Apartment>((resolve, reject) => {
+        (form.parse(req, async (err, fields, files) => {
+          const fieldData = fields as unknown as Apartment
+          const imageFile = files["imageFile"] as formidable.File
+          if (imageFile) {
+            try {            
+              const response: UploadApiResponse = await cloudinary.uploader.upload(imageFile.path)
+              resolve({ ...fieldData, imageUrl: response.secure_url })
+            } catch (e) {
+              return res.status(500).send({ error: "Picture upload failed" })
+            }
+          } else {
+            resolve({ ...fieldData, imageUrl: '' })
+          }
+          
+        }))
       })
-    
-      return res.status(200).json({ apartmentId: newApartmentRef.key })
+
+      const newApartmentRef = await firebaseAdmin.database().ref('apartments').push({
+        ...data
+      })
+      return res.status(200).send({ apartmentId: newApartmentRef.key })
+      
     } else {
       return res.status(500).json({ error: "User must be a realtor or admin" })
     }
 
     
   } catch (e) {
-    return res.status(500).json({ error: 'Unexpected error.' })
+    return res.status(500).send({ error: e.message })
   }
 }
 
