@@ -1,11 +1,10 @@
 import { init } from 'next-firebase-auth'
-import { Loader } from "@googlemaps/js-api-loader"
 import 'firebase/auth'
 import 'firebase/database'
 
 const TWELVE_DAYS_IN_MS = 12 * 60 * 60 * 24 * 1000
 
-const initAuth = () => {
+const initAuth = () => {  
   init({
     authPageURL: '/login',
     appPageURL: '/',

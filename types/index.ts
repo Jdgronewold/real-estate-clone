@@ -27,3 +27,13 @@ export interface User {
   role: UserRoles;
   likedApartments?: any[];
 }
+
+export interface RegisterData {
+  firstName: string
+  lastName: string
+  email: string,
+  passwordOne: string
+  passwordTwo: string
+  role: UserRoles
+  likedApartments?: string[]
+}

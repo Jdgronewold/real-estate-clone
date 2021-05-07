@@ -8,7 +8,6 @@ const handler = async (req, res) => {
     const user = await verifyIdToken(req.headers.authorization);
     const userRecord = await firebaseAdmin.auth().getUser(user.id);
     const { role } = userRecord.customClaims;
-
     const apartmentsObject = await firebaseAdmin
       .database()
       .ref("apartments")

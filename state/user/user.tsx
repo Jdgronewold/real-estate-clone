@@ -1,18 +1,19 @@
 import React from "react";
 import firebase from "firebase";
 import app from "firebase/app";
-import { UserRoles, User } from "../../types";
+import { User } from "../../types";
 
-export const UserContext = React.createContext<User>(null);
+export const UserContext = React.createContext<{ user: User, hasLoaded: boolean }>(null);
 
-class UserProvider extends React.Component<{}, { user: User }> {
+class UserProvider extends React.Component<{}, { user: User, hasLoaded: boolean }> {
   listener: firebase.Unsubscribe;
 
   constructor(props) {
     super(props);
     
     this.state = {
-      user: null
+      user: null,
+      hasLoaded: false
     };
   }
 
@@ -33,7 +34,7 @@ class UserProvider extends React.Component<{}, { user: User }> {
               ...dbUser,
             };
 
-            this.setState({ user });
+            this.setState({ user, hasLoaded: true });
           });
       }
     });
@@ -45,7 +46,7 @@ class UserProvider extends React.Component<{}, { user: User }> {
 
   render() {
     return (
-      <UserContext.Provider value={this.state.user}>
+      <UserContext.Provider value={this.state}>
         {this.props.children}
       </UserContext.Provider>
     );

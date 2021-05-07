@@ -104,3 +104,9 @@
   cursor: pointer;
   background-color: plum;
 }
+
+.formGroupError {
+  color: red;
+  min-width: 18em;
+  max-width: 18em;
+}

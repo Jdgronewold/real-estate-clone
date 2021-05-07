@@ -1,36 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from "react-hook-form"
 import styles from '../../styles/forms.module.css'
-import firebase from 'firebase'
-import app from 'firebase/app'
 import Link from 'next/link'
-import { makeAuthedPostRequest } from '../../utils/axiosUtils'
-import { UserRoles } from '../../types'
-
-interface RegisterData {
-  firstName: string
-  lastName: string
-  email: string,
-  passwordOne: string
-  passwordTwo: string
-  role: UserRoles
-}
+import { RegisterData, UserRoles } from '../../types'
+import axios, { AxiosError } from 'axios'
+import app from 'firebase/app'
 
 export default function Signup() {
-  const { register, handleSubmit, formState: { errors } } = useForm()
+  const { register, handleSubmit } = useForm()
+  const [error, setError] = useState<string>('')
+  const [isCreatingUser, setIsCreatingUser] = useState(false)
 
-  const onSubmit = async (data: RegisterData) => {
-    const { firstName, lastName, email, role} = data
-    
-    const { user } = await app.auth().createUserWithEmailAndPassword(data.email, data.passwordOne)
-    await makeAuthedPostRequest(user, '/api/set-role', { role })
-    await firebase.database().ref(`users/${user.uid}`).set({
-      firstName,
-      lastName,
-      email,
-      role,
-      likedApartments: []
-    })
+  const onSubmit = async (data: RegisterData) => {   
+    try {
+      setIsCreatingUser(true)
+      await axios.post('/api/register', { ...data })
+      await app.auth().signInWithEmailAndPassword(data.email, data.passwordOne)
+    } catch (error) {
+      setError(error.response.data)
+      setIsCreatingUser(false)
+    }
     
   }
 
@@ -94,13 +83,14 @@ export default function Signup() {
               <option value={UserRoles.ADMIN}>Admin</option>
             </select>
           </div>
+          <div className={styles.formGroupError}>
+            <span>{error}</span>
+          </div>
           <div className={styles.formGroup}>
             <button type="submit">
-              Sign Up
+              { isCreatingUser ? 'Creating user...' : 'Sign Up' }
             </button>
           </div>
-
-          {errors && <p>{errors.message}</p>}
         </form>
       </div>
     </div>

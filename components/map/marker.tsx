@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Apartment } from "../../types";
 import styles from './map.module.css'
+import Link from 'next/link'
 
 interface MarkerProps {
   lat: number;
@@ -10,8 +11,11 @@ interface MarkerProps {
 
 export const Marker = ({ apartment }: MarkerProps) => {
   return (
-  <div className={styles.marker}>
-    { apartment.pricePerMonth}
-  </div>
+    <Link href={`/apartments/${apartment.uid}`}>
+      <div className={styles.marker}>
+        { apartment.pricePerMonth}
+      </div>
+    </Link>
+  
   )
 };

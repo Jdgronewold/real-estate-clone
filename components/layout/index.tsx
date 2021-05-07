@@ -1,7 +1,9 @@
 import React from 'react'
-import { withAuthUser, useAuthUser } from 'next-firebase-auth'
+import { withAuthUser, useAuthUser, AuthAction } from 'next-firebase-auth'
 import styles from './layout.module.css'
 import Header from '../Header'
+
+const Loader = () => <div>Loading...</div>
 
 
 const Layout: React.FC = (props) => {
@@ -19,5 +21,6 @@ const Layout: React.FC = (props) => {
 }
 
 export default withAuthUser({
-  whenUnauthedBeforeInit: null
+  whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
+  LoaderComponent: Loader
 })(Layout)

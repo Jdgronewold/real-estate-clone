@@ -3,12 +3,8 @@ import { useForm } from "react-hook-form";
 import { useRouter } from 'next/router'
 import { useAuthUser, withAuthUser } from 'next-firebase-auth'
 import styles from "../../styles/forms.module.css";
-import { withDbUser } from '../../state/user'
-import { WithDbUser } from '../../state/user/context'
-import { compose } from 'recompose';
 import { makeAuthedPostRequest } from "../../utils/axiosUtils";
 import { GmapContext } from '../map/mapLoader'
-import util from 'util'
 
 // name, description, floor area size, price per month, number of rooms, valid geolocation coordinates, date added and an associated realtor.
 
@@ -23,14 +19,14 @@ interface CreateApartmentData {
   // imageFile: FileList
 }
 
-const CreateApartment = (props: WithDbUser) => {
+const CreateApartment = () => {
 
   const { mapsLoaded } = useContext(GmapContext)
   
   const geoencoder = useRef<google.maps.Geocoder>(null)
   const searchBox = useRef<google.maps.places.SearchBox>(null)
   const searchBoxRef = useRef<HTMLInputElement>()
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const authUser = useAuthUser()
   const router = useRouter()
 
@@ -38,7 +34,6 @@ const CreateApartment = (props: WithDbUser) => {
     if (mapsLoaded) {
       geoencoder.current = new google.maps.Geocoder()
       searchBox.current = new google.maps.places.SearchBox(searchBoxRef.current)
-      // searchBox.current.addListener('places_changed', onPlacesChanged)
     }
   }, [mapsLoaded])
 
@@ -60,21 +55,12 @@ const CreateApartment = (props: WithDbUser) => {
         (geoencoder.current.geocode(location, (result) => {
           resolve(result)
         }))
-      })
-      console.log(addresses);
-      
+      })      
       if (addresses.length) {
         locactionObject.address = addresses[0].formatted_address
       }
     }
     
-    console.log({
-      ...data,
-      dateAdded: new Date().toString(),
-      isRented: false
-    });
-    
-
     await makeAuthedPostRequest(authUser, '/api/apartments/create', {
       ...data,
       dateAdded: new Date().toString(),
@@ -98,7 +84,7 @@ const CreateApartment = (props: WithDbUser) => {
           <div className={styles.formGroup}>
             <input
               name="name"
-              {...register("name")}
+              {...register("name", { required: true })}
               type="text"
               placeholder="Name"
             />
@@ -106,7 +92,7 @@ const CreateApartment = (props: WithDbUser) => {
           <div className={styles.formGroup}>
             <input
               name="floorSize"
-              {...register("floorSize")}
+              {...register("floorSize", { required: true })}
               type="number"
               placeholder="Floor Size"
             />
@@ -114,7 +100,7 @@ const CreateApartment = (props: WithDbUser) => {
           <div className={styles.formGroup}>
             <input
               name="pricePerMonth"
-              {...register("pricePerMonth")}
+              {...register("pricePerMonth", { required: true })}
               type="number"
               placeholder="Price Per Month"
             />
@@ -122,7 +108,7 @@ const CreateApartment = (props: WithDbUser) => {
           <div className={styles.formGroup}>
             <input
               name="numRooms"
-              {...register("numRooms")}
+              {...register("numRooms", { required: true })}
               type="number"
               placeholder="Number of Rooms"
             />
@@ -143,6 +129,7 @@ const CreateApartment = (props: WithDbUser) => {
                 name="location"
                 type="radio"
                 value="address"
+                checked
                 {...register("location")}
               />
             </label>
@@ -168,7 +155,7 @@ const CreateApartment = (props: WithDbUser) => {
           <div className={styles.formGroup}>
             <input
               name="realtor"
-              {...register("realtor")}
+              {...register("realtor", { required: true })}
               type="text"
               placeholder="Associated Realtor"
             />
@@ -176,7 +163,7 @@ const CreateApartment = (props: WithDbUser) => {
           <div className={styles.formGroup}>
             <textarea
               name="description"
-              {...register("description")}
+              {...register("description", { required: true })}
               placeholder="Description"
             />
           </div>
@@ -191,4 +178,4 @@ const CreateApartment = (props: WithDbUser) => {
   );
 };
 
-export default compose(withAuthUser(), withDbUser)(CreateApartment);
+export default withAuthUser()(CreateApartment);

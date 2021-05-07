@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import Link from "next/link";
 import { slide as Menu } from "react-burger-menu";
-import { withDbUser } from "../state/user";
 import { UserRoles } from "../types";
+import { UserContext } from "../state/user/user";
 
 const burgerStyles = {
   bmBurgerButton: {
@@ -69,11 +69,12 @@ const styles = {
   },
 };
 
-const Header = ({ email, signOut, dbUser }) => {
+const Header = ({ email, signOut }) => {
+  const { user, hasLoaded } = useContext(UserContext)
   return (
     <div style={styles.container}>
       <Link href="/"><a><h1>Toptal Real Estate</h1></a></Link>
-      {dbUser && email ? (
+      {user && email ? (
         <Menu styles={burgerStyles} right>
           <div>
             <Link href="/profile">Profile</Link>
@@ -81,8 +82,8 @@ const Header = ({ email, signOut, dbUser }) => {
           <div>
             <Link href="/profile">Saved Apartments</Link>
           </div>
-          {(dbUser.role === UserRoles.REALTOR ||
-            dbUser.role === UserRoles.ADMIN) && (
+          {(user.role === UserRoles.REALTOR ||
+            user.role === UserRoles.ADMIN) && (
             <div>
               <Link href="/apartments/create">Create New Listing</Link>
             </div>
@@ -93,10 +94,14 @@ const Header = ({ email, signOut, dbUser }) => {
           </div>
         </Menu>
       ) : (
-        <Link href="/login"> Sign in </Link>
+        <Link href="/login">
+          <a>
+            { hasLoaded ? 'Sign in' : '' }
+          </a>
+        </Link>
       )}
     </div>
   );
 };
 
-export default withDbUser(Header);
+export default Header;
