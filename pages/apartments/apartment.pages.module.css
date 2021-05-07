@@ -1,0 +1,65 @@
+.apartmentDisplay {
+  height: calc(100vh - 60px);
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 60px;
+  background-color: honeydew;
+}
+
+.apartmentDisplayBack {
+  align-self: flex-start;
+  padding-left: 15%;
+  margin: 15px 0;
+}
+
+.apartmentDisplayBack:hover {
+  cursor: pointer;
+}
+
+.apartmentImage {
+  width: 70%;
+  height: 60%;
+  position: relative;
+}
+
+.apartmentDisplayImage {
+  border-radius: 10px;
+
+}
+
+.apartmentDisplayBody {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  color: grey;
+}
+
+.apartmentDisplayBody > div {
+  padding: 10px 0;
+}
+
+.apartmentDisplayTitle {
+  font-size: 1.4em;
+  font-weight: bold;
+  color: black;
+}
+
+.apartmentDisplaySubHeader {
+  display: flex;
+  font-size: 1.2em;
+}
+
+.apartmentDisplaySubHeader > div:not(:first-of-type) {
+  padding: 0 20px;
+}
+
+.apartmentDisplayDescription {
+  width: 100%;
+  border-top: 1px solid black;
+  color: black;
+  margin-top: 20px;
+  padding-top: 20px !important;
+}

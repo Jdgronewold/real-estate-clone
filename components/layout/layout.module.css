@@ -6,4 +6,5 @@
 .header {
   height: 60px;
   display: flex;
+  background-color: honeydew;
 }
