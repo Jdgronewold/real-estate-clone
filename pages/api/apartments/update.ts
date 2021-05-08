@@ -5,6 +5,7 @@ import formidable from 'formidable'
 var cloudinary = require('cloudinary').v2;
 import {UploadApiResponse } from 'cloudinary'
 
+
 const cloudConfig = {
   cloudName: 'toptalRealEstate',
   apiKey: process.env.CLOUDINARY_API,
@@ -39,16 +40,16 @@ const handler = async (req, res) => {
               return res.status(500).send({ error: "Picture upload failed" })
             }
           } else {
-            resolve({ ...fieldData, imageUrl: '' })
+            resolve({ ...fieldData }) // leave off imageUrl becuase it is either already there or still empty
           }
           
         }))
-      })
+      })      
 
-      const newApartmentRef = await firebaseAdmin.database().ref('apartments').push({
+     await firebaseAdmin.database().ref(`apartments/${data.uid}`).set({
         ...data
       })
-      return res.status(200).send({ apartmentId: newApartmentRef.key })
+      return res.status(200).send({ success: true })
       
     } else {
       return res.status(500).json({ error: "User must be a realtor or admin" })

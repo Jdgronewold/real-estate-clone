@@ -11,3 +11,8 @@ export const makeAuthedGetRequest = async <T>(user: AuthUser | firebase.User, en
   const token = await user.getIdToken()
   return axios.get(endpoint, { headers: { Authorization: token || 'unauthenticated' }})
 } 
+
+export const makeAuthedPutRequest = async <T>(user: AuthUser | firebase.User, endpoint: string, data: T) => {
+  const token = await user.getIdToken()
+  return axios.put(endpoint, data, { headers: { Authorization: token || 'unauthenticated' }})
+}

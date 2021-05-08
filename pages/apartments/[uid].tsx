@@ -1,18 +1,29 @@
 import React from "react";
-import { getFirebaseAdmin } from "next-firebase-auth";
+import { getFirebaseAdmin, withAuthUser, useAuthUser } from "next-firebase-auth";
 import { parseApartments } from "../../utils/parseApartments";
-import { Apartment } from "../../types";
+import { Apartment, UserRoles } from "../../types";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./apartment.pages.module.css";
 import Layout from "../../components/layout";
 
 const ApartmentPage: React.FC<{ apartment: Apartment }> = ({ apartment }) => {
+  const authUser =  useAuthUser()  
   return (
     <Layout>
       {apartment && (
         <div className={styles.apartmentDisplay}>
-          <Link href="/"><div className={styles.apartmentDisplayBack}>{'Back to apartment list'}</div></Link>
+          <div className={styles.apartmentDisplayHeader}>
+          <Link href="/"><div>{'Back to apartment list'}</div></Link>
+            {
+              (authUser.claims["role"] === UserRoles.ADMIN || authUser.claims["role"] === UserRoles.REALTOR) &&
+              <Link href={`/apartments/update/${apartment.uid}`}>
+                <div>
+                  Edit Listing
+                </div>
+              </Link>
+            }
+          </div>
           <div className={styles.apartmentImage}>
             <Image
               className={styles.apartmentDisplayImage}
@@ -65,9 +76,9 @@ export async function getStaticProps({ params }) {
   ).val();
 
   return {
-    props: { apartment },
+    props: { apartment: { ...apartment, uid: params.uid } },
     revalidate: 10,
   };
 }
 
-export default ApartmentPage;
+export default withAuthUser()(ApartmentPage);
