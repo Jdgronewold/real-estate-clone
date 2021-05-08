@@ -26,7 +26,7 @@ const Home: React.FC<{ initialApartments: Apartment[] }> = ({ initialApartments 
         <Head>
           <title>Toptal Real Estate</title>
         </Head>
-        <Map />
+        <Map initialApartments={apartments}/>
         { apartments && <ApartmentList apartments={apartments} /> }
       </div>
     </Layout>

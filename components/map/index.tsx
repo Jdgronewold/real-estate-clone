@@ -1,16 +1,20 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef } from "react";
 import GoogleMapReact from "google-map-react";
 import { Marker } from "./marker";
 import styles from "./map.module.css";
 import { useApartments } from "../../state/apartments/useApartments";
-import { Apartment } from "../../types";
+import { Apartment, UserRoles } from "../../types";
+import { withAuthUser, useAuthUser } from 'next-firebase-auth'
 
 const Map: React.FC<{ initialApartments: Apartment[] }> = ({
   initialApartments,
 }) => {
+  const AuthUser = useAuthUser()
   const map = useRef<google.maps.Map>(null);
   const mapsApi = useRef<any>(null);
   const apartments = useApartments(initialApartments);
+  console.log(AuthUser.claims.role === UserRoles.ClIENT);
+  
 
   return (
     <div className={styles.mapRoot}>
@@ -44,4 +48,4 @@ const Map: React.FC<{ initialApartments: Apartment[] }> = ({
   );
 };
 
-export default Map;
+export default withAuthUser<{ initialApartments: Apartment[]}>()(Map);

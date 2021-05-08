@@ -23,21 +23,9 @@ const handler = async (req, res) => {
         apartments: []
       })
     }
-    const apartments = parseApartments(apartmentsObject)
+    const apartments = parseApartments(apartmentsObject, role === UserRoles.ClIENT)
+    return res.status(200).json({ apartments });
 
-    if (role === UserRoles.ADMIN || role === UserRoles.REALTOR) {
-      return res.status(200).json({ apartments });
-    } else if (role === UserRoles.ClIENT) {
-      return res
-        .status(200)
-        .json({
-          apartments: apartments.filter((apartment) => !apartment.isRented),
-        });
-    } else {
-      return res
-        .status(500)
-        .json({ error: "User must have a role to see apartments" });
-    }
   } catch (e) {
     return res.status(500).json({ error: "Unexpected error." });
   }

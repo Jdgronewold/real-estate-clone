@@ -1,5 +1,5 @@
 import React from "react";
-import { getFirebaseAdmin, withAuthUser, useAuthUser } from "next-firebase-auth";
+import { getFirebaseAdmin, withAuthUser, useAuthUser, AuthAction } from "next-firebase-auth";
 import { parseApartments } from "../../utils/parseApartments";
 import { Apartment, UserRoles } from "../../types";
 import Image from "next/image";
@@ -77,8 +77,8 @@ export async function getStaticProps({ params }) {
 
   return {
     props: { apartment: { ...apartment, uid: params.uid } },
-    revalidate: 10,
+    revalidate: 1,
   };
 }
 
-export default withAuthUser()(ApartmentPage);
+export default withAuthUser({ whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN})(ApartmentPage);

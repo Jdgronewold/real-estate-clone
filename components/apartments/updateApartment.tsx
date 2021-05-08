@@ -20,7 +20,7 @@ interface UpdateApartmentData {
   imageFile: FileList,
   isRented: boolean,
   address: string,
-  latLng: string
+  latLng: string,
 }
 
 const UpdateApartment: React.FC<{ apartment: Apartment}> = ({ apartment }) => {
@@ -97,6 +97,18 @@ const UpdateApartment: React.FC<{ apartment: Apartment}> = ({ apartment }) => {
           </div>
         </div>
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+        <div className={styles.formGroup}>
+          <label>
+            Has been rented:
+            <input
+              name="isRented"
+              {...register("isRented", { required: true })}
+              type="checkbox"
+              defaultChecked={apartment.isRented}
+              placeholder="Associated Realtor"
+            />
+          </label>
+          </div>
           <div className={styles.formGroup}>
             <input
               name="name"

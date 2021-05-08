@@ -44,7 +44,7 @@
   font-size: 20px;
 }
     
-.formGroup input:not([type=radio]), .formGroup select, .formGroup textarea {
+.formGroup input:not([type=radio]):not([type=checkbox]), .formGroup select, .formGroup textarea {
   margin-top: 6px;
   min-width: 18em;
   max-width: 18em;
