@@ -1,11 +1,13 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from 'next/router'
 import { useAuthUser, withAuthUser } from 'next-firebase-auth'
 import styles from "../../styles/forms.module.css";
 import { makeAuthedPutRequest } from "../../utils/axiosUtils";
 import { GmapContext } from '../map/mapLoader'
-import { Apartment } from "../../types";
+import { Apartment, User, UserRoles } from "../../types";
+import app from 'firebase/app'
+
 
 // name, description, floor area size, price per month, number of rooms, valid geolocation coordinates, date added and an associated realtor.
 
@@ -33,6 +35,8 @@ const UpdateApartment: React.FC<{ apartment: Apartment}> = ({ apartment }) => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const authUser = useAuthUser()
   const router = useRouter()
+  const [realtors, setRealtors] = useState<User[]>([])  
+
 
   useEffect(() => {    
     if (mapsLoaded) {
@@ -40,6 +44,13 @@ const UpdateApartment: React.FC<{ apartment: Apartment}> = ({ apartment }) => {
       searchBox.current = new google.maps.places.SearchBox(searchBoxRef.current)
     }
   }, [mapsLoaded])
+
+  useEffect(() => {
+    app.database().ref('users').orderByChild("role").equalTo(UserRoles.REALTOR).once("value", (snapshot) => {
+      const realtors = snapshot.val()
+      setRealtors(Object.keys(realtors).map((key) => realtors[key]))
+    })
+  }, [])
 
   const onSubmit = async (data: UpdateApartmentData) => {
     const locationObject = { latLng: apartment.latLng, address: apartment.address }
@@ -185,13 +196,15 @@ const UpdateApartment: React.FC<{ apartment: Apartment}> = ({ apartment }) => {
             />
           </div>
           <div className={styles.formGroup}>
-            <input
-              name="realtor"
-              {...register("realtor", { required: true })}
-              type="text"
-              defaultValue={apartment.realtor}
-              placeholder="Associated Realtor"
-            />
+          <select {...register("realtor")}>
+               <option disabled selected>Associated Realtor</option>
+              {
+                realtors.map((realtor) => {
+                  const value = `${realtor.firstName} ${realtor.lastName}`
+                  return <option value={value} selected={value === apartment.realtor}>{value}</option>
+                })
+              }
+            </select>
           </div>
           <div className={styles.formGroup}>
             <textarea

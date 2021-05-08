@@ -3,18 +3,15 @@ import GoogleMapReact from "google-map-react";
 import { Marker } from "./marker";
 import styles from "./map.module.css";
 import { useApartments } from "../../state/apartments/useApartments";
-import { Apartment, UserRoles } from "../../types";
-import { withAuthUser, useAuthUser } from 'next-firebase-auth'
+import { Apartment } from "../../types";
+import { withAuthUser } from 'next-firebase-auth'
 
 const Map: React.FC<{ initialApartments: Apartment[] }> = ({
   initialApartments,
 }) => {
-  const AuthUser = useAuthUser()
   const map = useRef<google.maps.Map>(null);
   const mapsApi = useRef<any>(null);
-  const apartments = useApartments(initialApartments);
-  console.log(AuthUser.claims.role === UserRoles.ClIENT);
-  
+  const apartments = useApartments(initialApartments);  
 
   return (
     <div className={styles.mapRoot}>

@@ -59,7 +59,7 @@ export async function getStaticPaths() {
   const apartmentsObject = await (
     await db.ref(`apartments`).once("value")
   ).val();
-  const apartments = parseApartments(apartmentsObject);
+  const apartments = parseApartments(apartmentsObject, false);
 
   return {
     paths: apartments.map((apt) => ({ params: { uid: apt.uid } })),

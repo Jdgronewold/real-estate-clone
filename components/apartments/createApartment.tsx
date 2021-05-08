@@ -1,10 +1,12 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from 'next/router'
 import { useAuthUser, withAuthUser } from 'next-firebase-auth'
 import styles from "../../styles/forms.module.css";
 import { makeAuthedPostRequest } from "../../utils/axiosUtils";
 import { GmapContext } from '../map/mapLoader'
+import app from 'firebase/app'
+import { User, UserRoles } from "../../types";
 
 // name, description, floor area size, price per month, number of rooms, valid geolocation coordinates, date added and an associated realtor.
 
@@ -29,6 +31,7 @@ const CreateApartment = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const authUser = useAuthUser()
   const router = useRouter()
+  const [realtors, setRealtors] = useState<User[]>([])  
 
   useEffect(() => {    
     if (mapsLoaded) {
@@ -36,6 +39,13 @@ const CreateApartment = () => {
       searchBox.current = new google.maps.places.SearchBox(searchBoxRef.current)
     }
   }, [mapsLoaded])
+
+  useEffect(() => {
+    app.database().ref('users').orderByChild("role").equalTo(UserRoles.REALTOR).once("value", (snapshot) => {
+      const realtors = snapshot.val()
+      setRealtors(Object.keys(realtors).map((key) => realtors[key]))
+    })
+  }, [])
 
   const onSubmit = async (data: CreateApartmentData) => {
     const locationObject = { latLng: '', address: '' }
@@ -159,12 +169,15 @@ const CreateApartment = () => {
             />
           </div>
           <div className={styles.formGroup}>
-            <input
-              name="realtor"
-              {...register("realtor", { required: true })}
-              type="text"
-              placeholder="Associated Realtor"
-            />
+            <select {...register("realtor")}>
+               <option disabled selected>Associated Realtor</option>
+              {
+                realtors.map((realtor) => {
+                  const value = `${realtor.firstName} ${realtor.lastName}`
+                  return <option value={value}>{value}</option>
+                })
+              }
+            </select>
           </div>
           <div className={styles.formGroup}>
             <textarea
