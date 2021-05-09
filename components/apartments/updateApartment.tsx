@@ -7,6 +7,7 @@ import { makeAuthedPutRequest } from "../../utils/axiosUtils";
 import { GmapContext } from '../map/mapLoader'
 import { Apartment, User, UserRoles } from "../../types";
 import app from 'firebase/app'
+import axios from 'axios'
 
 
 // name, description, floor area size, price per month, number of rooms, valid geolocation coordinates, date added and an associated realtor.
@@ -51,6 +52,17 @@ const UpdateApartment: React.FC<{ apartment: Apartment}> = ({ apartment }) => {
       setRealtors(Object.keys(realtors).map((key) => realtors[key]))
     })
   }, [])
+
+  const onDelete = async () => {
+    const token = await authUser.getIdToken()
+    await axios({
+      url: '/api/apartments/delete',
+      method: 'DELETE',
+      headers: { Authorization: token },
+      data: { uid : apartment.uid}
+    })
+    router.push("/")
+  }
 
   const onSubmit = async (data: UpdateApartmentData) => {
     const locationObject = { latLng: apartment.latLng, address: apartment.address }
@@ -103,9 +115,12 @@ const UpdateApartment: React.FC<{ apartment: Apartment}> = ({ apartment }) => {
     <div className={styles.formContainer}>
       <div className={styles.formWrapper}>
         <div className={styles.formHeader}>
-          <h1> Update listing </h1>
-          <div>
-          </div>
+          <h1> Update Listing </h1>
+        </div>
+        <div className={styles.formGroup}>
+          <button onClick={onDelete}>
+            Delete Listing
+          </button>
         </div>
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.formGroup}>

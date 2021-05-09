@@ -1,9 +1,9 @@
 import React from 'react'
-import firebaseAdmin from 'firebase-admin'
-import { getFirebaseAdmin } from 'next-firebase-auth'
-import { User } from '../../../types';
+import { AuthAction, getFirebaseAdmin, withAuthUser, useAuthUser } from 'next-firebase-auth'
+import { User, UserRoles } from '../../../types';
 import Layout from '../../../components/layout';
-import { AdminEditUser } from '../../../components/user/adminEdit';
+import AdminEditUser from '../../../components/user/adminEdit';
+import router from 'next/router'
 
 const EditUser: React.FC<{user: User}> = ({ user }) => {
   return (
@@ -36,4 +36,4 @@ export async function getStaticProps({ params }) {
   };
 }
 
-export default EditUser
+export default withAuthUser({ whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN })(EditUser)

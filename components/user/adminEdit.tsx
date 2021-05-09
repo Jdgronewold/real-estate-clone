@@ -1,22 +1,36 @@
 import React, { useState } from 'react'
 import { useForm } from "react-hook-form"
 import { RegisterData, User, UserRoles } from '../../types'
-import axios from 'axios'
 import { useRouter } from 'next/router'
 import styles from '../../styles/forms.module.css'
+import { makeAuthedPostRequest } from '../../utils/axiosUtils'
+import { withAuthUser, useAuthUser } from 'next-firebase-auth'
+import axios from 'axios'
 
 
 
-export const AdminEditUser: React.FC<{user: User}> = ({ user }) => {
+const AdminEditUser: React.FC<{user: User}> = ({ user }) => {
   const { register, handleSubmit } = useForm()
   const [error, setError] = useState<string>('')
   const [isCreatingUser, setIsCreatingUser] = useState(false)
+  const AuthUser = useAuthUser()
   const router = useRouter()
+
+  const deleteUser = async () => {
+    const token = await AuthUser.getIdToken()
+    await axios({
+      url: '/api/admin/delete',
+      method: 'DELETE',
+      headers: { Authorization: token },
+      data: { uid : user.uid}
+    })
+    router.push("/admin")
+  }
 
   const onSubmit = async (data: RegisterData) => {   
     try {
-      setIsCreatingUser(true)
-      await axios.post('/api/register', { ...data })
+      setIsCreatingUser(true)      
+      await makeAuthedPostRequest(AuthUser, '/api/admin/update', { ...data, uid: user.uid })
       setIsCreatingUser(false)
       router.push("/")
     } catch (error) {
@@ -31,6 +45,11 @@ export const AdminEditUser: React.FC<{user: User}> = ({ user }) => {
       <div className={styles.formWrapper}> 
         <div className={styles.formHeader}>
           <h1> Edit User </h1>
+        </div>
+        <div className={styles.formGroup}>
+          <button onClick={deleteUser}>
+            Delete User
+          </button>
         </div>
         <form className={styles.form} noValidate onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.formGroup}>
@@ -99,3 +118,5 @@ export const AdminEditUser: React.FC<{user: User}> = ({ user }) => {
     </div>
   )
 }
+
+export default withAuthUser<{user: User}>()(AdminEditUser)

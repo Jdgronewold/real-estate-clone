@@ -4,6 +4,7 @@ import { Apartment, UserRoles } from '../../../types';
 import formidable from 'formidable'
 var cloudinary = require('cloudinary').v2;
 import {UploadApiResponse } from 'cloudinary'
+import { getRoleFromHeader } from '../../../utils/apiUtils';
 
 const cloudConfig = {
   cloudName: 'toptalRealEstate',
@@ -21,9 +22,7 @@ export const config = {
 
 const handler = async (req, res) => {
   try {
-    const user = await verifyIdToken(req.headers.authorization)
-    const userRecord = await firebaseAdmin.auth().getUser(user.id)
-    const { role } = userRecord.customClaims
+    const role = await getRoleFromHeader(req.headers.authorization)
 
     if ( role === UserRoles.ADMIN || role === UserRoles.REALTOR) {
       const form = new formidable.IncomingForm();

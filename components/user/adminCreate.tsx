@@ -18,7 +18,7 @@ export const AdminCreateUser: React.FC = () => {
       setIsCreatingUser(true)
       await axios.post('/api/register', { ...data })
       setIsCreatingUser(false)
-      router.push("/")
+      router.push("/admin")
     } catch (error) {
       setError(error.response.data)
       setIsCreatingUser(false)

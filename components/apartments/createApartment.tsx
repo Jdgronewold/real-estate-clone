@@ -74,9 +74,10 @@ const CreateApartment = () => {
     }
 
     const form = new FormData()
-    Object.keys({...data, ...locationObject, isRented: false }).forEach((key) => {
+    const finalObject = {...data, ...locationObject, isRented: false }
+    Object.keys(finalObject).forEach((key) => {
       if (key !== 'imageFile') {
-        form.append(key, data[key] || locationObject[key])
+        form.append(key, finalObject[key])
       }
     })
     form.append('imageFile', data.imageFile[0])

@@ -7,11 +7,10 @@ const handler = async (req, res) => {
   try {
     const requestRole = await getRoleFromHeader(req.headers.authorization)
 
-    if (requestRole !== UserRoles.ADMIN) {
-      return res.status(500).send({ message: 'Must be an admin'})
+    if (requestRole === UserRoles.ClIENT) {
+      return res.status(500).send({ message: 'Must be an Admin or Realtor to delete'})
     }    
-    await firebaseAdmin.auth().deleteUser(req.body.uid)
-    await firebaseAdmin.database().ref(`users/${req.body.uid}`).remove()
+    await firebaseAdmin.database().ref(`apartments/${req.body.uid}`).remove()
 
     res.status(200).send({ success: true })
 
