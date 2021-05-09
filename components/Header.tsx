@@ -88,6 +88,12 @@ const Header = ({ email, signOut }) => {
               <Link href="/apartments/create">Create New Listing</Link>
             </div>
           )}
+          {
+            user.role === UserRoles.ADMIN &&
+            <div>
+              <Link href="/admin/create-user">Create New User</Link>
+            </div>
+          }
           <div style={styles.button} onClick={() => signOut()}>
             {" "}
             Sign Out

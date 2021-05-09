@@ -43,7 +43,9 @@ const CreateApartment = () => {
   useEffect(() => {
     app.database().ref('users').orderByChild("role").equalTo(UserRoles.REALTOR).once("value", (snapshot) => {
       const realtors = snapshot.val()
-      setRealtors(Object.keys(realtors).map((key) => realtors[key]))
+      if (realtors) {
+        setRealtors(Object.keys(realtors).map((key) => realtors[key]))
+      }
     })
   }, [])
 

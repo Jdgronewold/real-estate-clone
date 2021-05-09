@@ -1,21 +1,24 @@
 import React, { useState } from 'react'
 import { useForm } from "react-hook-form"
 import styles from '../../styles/forms.module.css'
-import Link from 'next/link'
 import { RegisterData, UserRoles } from '../../types'
 import axios from 'axios'
-import app from 'firebase/app'
+import { useRouter } from 'next/router'
 
-export default function Signup() {
+
+
+export const AdminCreateUser: React.FC = () => {
   const { register, handleSubmit } = useForm()
   const [error, setError] = useState<string>('')
   const [isCreatingUser, setIsCreatingUser] = useState(false)
+  const router = useRouter()
 
   const onSubmit = async (data: RegisterData) => {   
     try {
       setIsCreatingUser(true)
       await axios.post('/api/register', { ...data })
-      await app.auth().signInWithEmailAndPassword(data.email, data.passwordOne)
+      setIsCreatingUser(false)
+      router.push("/")
     } catch (error) {
       setError(error.response.data)
       setIsCreatingUser(false)
@@ -26,11 +29,8 @@ export default function Signup() {
   return (
     <div className={styles.formContainer}>
       <div className={styles.formWrapper}> 
-        <div className={styles.formHeaderWithSub}>
-          <h1> Register </h1>
-          <div>
-            <span>Already have an account? </span><Link href="/login">Sign in</Link>
-          </div>
+        <div className={styles.formHeader}>
+          <h1> Create User </h1>
         </div>
         <form className={styles.form} noValidate onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.formGroup}>
@@ -88,7 +88,7 @@ export default function Signup() {
           </div>
           <div className={styles.formGroup}>
             <button type="submit">
-              { isCreatingUser ? 'Creating user...' : 'Sign Up' }
+              { isCreatingUser ? 'Creating user...' : 'Create User' }
             </button>
           </div>
         </form>

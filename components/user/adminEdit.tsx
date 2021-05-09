@@ -1,21 +1,24 @@
 import React, { useState } from 'react'
 import { useForm } from "react-hook-form"
-import styles from '../../styles/forms.module.css'
-import Link from 'next/link'
-import { RegisterData, UserRoles } from '../../types'
+import { RegisterData, User, UserRoles } from '../../types'
 import axios from 'axios'
-import app from 'firebase/app'
+import { useRouter } from 'next/router'
+import styles from '../../styles/forms.module.css'
 
-export default function Signup() {
+
+
+export const AdminEditUser: React.FC<{user: User}> = ({ user }) => {
   const { register, handleSubmit } = useForm()
   const [error, setError] = useState<string>('')
   const [isCreatingUser, setIsCreatingUser] = useState(false)
+  const router = useRouter()
 
   const onSubmit = async (data: RegisterData) => {   
     try {
       setIsCreatingUser(true)
       await axios.post('/api/register', { ...data })
-      await app.auth().signInWithEmailAndPassword(data.email, data.passwordOne)
+      setIsCreatingUser(false)
+      router.push("/")
     } catch (error) {
       setError(error.response.data)
       setIsCreatingUser(false)
@@ -26,11 +29,8 @@ export default function Signup() {
   return (
     <div className={styles.formContainer}>
       <div className={styles.formWrapper}> 
-        <div className={styles.formHeaderWithSub}>
-          <h1> Register </h1>
-          <div>
-            <span>Already have an account? </span><Link href="/login">Sign in</Link>
-          </div>
+        <div className={styles.formHeader}>
+          <h1> Edit User </h1>
         </div>
         <form className={styles.form} noValidate onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.formGroup}>
@@ -39,6 +39,7 @@ export default function Signup() {
                 {...register('firstName')}
                 type="text"
                 placeholder="First Name"
+                defaultValue={user.firstName}
             />
           </div>
           <div className={styles.formGroup}>
@@ -47,6 +48,7 @@ export default function Signup() {
               {...register('lastName')}
               type="text"
               placeholder="Last Name"
+              defaultValue={user.lastName}
             />
           </div>
       
@@ -56,6 +58,7 @@ export default function Signup() {
               {...register('email')}
               type="text"
               placeholder="Email Address"
+              defaultValue={user.email}
             />
           </div>
       
@@ -78,9 +81,9 @@ export default function Signup() {
       
           <div className={styles.formGroup}>
             <select {...register("role")}>
-              <option value={UserRoles.ClIENT}>Client</option>
-              <option value={UserRoles.REALTOR}>Realtor</option>
-              <option value={UserRoles.ADMIN}>Admin</option>
+              <option value={UserRoles.ClIENT} selected={user.role === UserRoles.ClIENT}>Client</option>
+              <option value={UserRoles.REALTOR} selected={user.role === UserRoles.REALTOR}>Realtor</option>
+              <option value={UserRoles.ADMIN} selected={user.role === UserRoles.ADMIN}>Admin</option>
             </select>
           </div>
           <div className={styles.formGroupError}>
@@ -88,7 +91,7 @@ export default function Signup() {
           </div>
           <div className={styles.formGroup}>
             <button type="submit">
-              { isCreatingUser ? 'Creating user...' : 'Sign Up' }
+              { isCreatingUser ? 'Editing user...' : 'Edit User' }
             </button>
           </div>
         </form>

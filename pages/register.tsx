@@ -7,7 +7,7 @@ import {
 import Signup from '../components/signup'
 import Layout from '../components/layout'
 
-const Auth = () => (
+const Register = () => (
   <Layout>
     <Signup />
   </Layout>
@@ -17,4 +17,4 @@ export const getServerSideProps = withAuthUserTokenSSR({
   whenAuthed: AuthAction.REDIRECT_TO_APP,
 })()
 
-export default withAuthUser({ whenAuthed: AuthAction.REDIRECT_TO_APP })(Auth)
+export default withAuthUser({ whenAuthed: AuthAction.REDIRECT_TO_APP })(Register)
