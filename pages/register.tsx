@@ -6,6 +6,9 @@ import {
 } from 'next-firebase-auth'
 import Signup from '../components/signup'
 import Layout from '../components/layout'
+import initAuth from '../utils/initAuth'
+
+initAuth()
 
 const Register = () => (
   <Layout>

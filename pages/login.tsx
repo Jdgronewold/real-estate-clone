@@ -6,6 +6,9 @@ import {
 } from 'next-firebase-auth'
 import Login from '../components/login'
 import Layout from '../components/layout'
+import initAuth from '../utils/initAuth'
+
+initAuth()
 
 const Auth = () => (
   <Layout>
