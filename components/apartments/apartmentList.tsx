@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Apartment } from "../../types";
 import styles from "./apartments.module.css";
 import { ApartmentCard } from "./apartmentCard";
@@ -20,6 +20,45 @@ const ApartmentList: React.FC<{ apartments: Apartment[] }> = ({
   });
   const [showFilters, setShowFilters] = useState(false);
 
+  const filteredApartments = useMemo(() => {
+    const apartmentsFilteredByPrice = apartments.filter((apt) => {
+      let filtered = true;
+      if (price.min !== null) {
+        filtered = apt.pricePerMonth > price.min;
+      }
+      if (price.max !== null) {
+        filtered = apt.pricePerMonth < price.max;
+      }
+      return filtered;
+    });
+
+    const apartmentsFilteredByRooms = apartmentsFilteredByPrice.filter(
+      (apt) => {
+        let filtered = true;
+
+        if (numRooms.min !== null) {
+          filtered = apt.numRooms > numRooms.min;
+        }
+        if (numRooms.max !== null) {
+          filtered = apt.numRooms < numRooms.max;
+        }
+        return filtered;
+      }
+    );
+
+    const apartmentsFilteredBySize = apartmentsFilteredByRooms.filter((apt) => {
+      let filtered = true;
+      if (floorSize.min !== null) {
+        filtered = apt.floorSize > floorSize.min;
+      }
+      if (floorSize.max !== null) {
+        filtered = apt.floorSize < floorSize.max;
+      }
+      return filtered;
+    });
+    return apartmentsFilteredBySize;
+  }, [apartments, floorSize, price, numRooms]);
+
   return (
     <div className={styles.apartments}>
       <div
@@ -33,15 +72,18 @@ const ApartmentList: React.FC<{ apartments: Apartment[] }> = ({
             {showFilters ? "-" : "+"}
           </div>
         </div>
-        <div className={styles.apartmentFilterOpacity} style={{ opacity: showFilters ? 1 : 0 }}>
+        <div
+          className={styles.apartmentFilterOpacity}
+          style={{ opacity: showFilters ? 1 : 0 }}
+        >
           <div className={styles.apartmentFilter}>
             <input
               name="minPrince"
               value={price.min}
               placeholder="Min Price"
               type="number"
-              onChange={(event) =>
-                setPrice({ ...price, min: parseInt(event.target.value) })
+              onChange={({ target: { value } }) =>
+                setPrice({ ...price, min: value ? parseInt(value) : null })
               }
             />
             <input
@@ -49,8 +91,8 @@ const ApartmentList: React.FC<{ apartments: Apartment[] }> = ({
               value={price.max}
               placeholder="Max Price"
               type="number"
-              onChange={(event) =>
-                setPrice({ ...price, max: parseInt(event.target.value) })
+              onChange={({ target: { value } }) =>
+                setPrice({ ...price, max: value ? parseInt(value) : null })
               }
             />
           </div>
@@ -60,22 +102,22 @@ const ApartmentList: React.FC<{ apartments: Apartment[] }> = ({
               value={floorSize.min}
               placeholder="Min Floor Size (Sq Ft)"
               type="number"
-              onChange={(event) =>
+              onChange={({ target: { value } }) =>
                 setFloorSize({
                   ...floorSize,
-                  min: parseInt(event.target.value),
+                  min: value ? parseInt(value) : null,
                 })
               }
             />
             <input
               name="maxFloorSize"
               value={floorSize.max}
-              placeholder="Max Price"
+              placeholder="Min Floor Size (Sq Ft)"
               type="number"
-              onChange={(event) =>
+              onChange={({ target: { value } }) =>
                 setFloorSize({
                   ...floorSize,
-                  max: parseInt(event.target.value),
+                  max: value ? parseInt(value) : null,
                 })
               }
             />
@@ -83,25 +125,25 @@ const ApartmentList: React.FC<{ apartments: Apartment[] }> = ({
           <div className={styles.apartmentFilter}>
             <input
               name="minNumRooms"
-              value={price.min}
+              value={numRooms.min}
               placeholder="Min Number of Rooms"
               type="number"
-              onChange={(event) =>
+              onChange={({ target: { value } }) =>
                 setNumRooms({
                   ...numRooms,
-                  min: parseInt(event.target.value),
+                  min: value ? parseInt(value) : null,
                 })
               }
             />
             <input
               name="maxNumRooms"
-              value={price.max}
+              value={numRooms.max}
               type="number"
               placeholder="Max Number of Rooms"
-              onChange={(event) =>
+              onChange={({ target: { value } }) =>
                 setNumRooms({
                   ...numRooms,
-                  max: parseInt(event.target.value),
+                  max: value ? parseInt(value) : null,
                 })
               }
             />
@@ -110,7 +152,7 @@ const ApartmentList: React.FC<{ apartments: Apartment[] }> = ({
         {/* )} */}
       </div>
       <ul className={styles.apartmentList}>
-        {apartments.map((apartment) => {
+        {filteredApartments.map((apartment) => {
           return (
             <ApartmentCard
               apartment={apartment}
