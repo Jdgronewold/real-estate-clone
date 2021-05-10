@@ -1,11 +1,13 @@
 import React from "react";
-import { Apartment } from "../../types";
+import { Apartment, UserRoles } from "../../types";
 import styles from "./apartments.module.css";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { withAuthUser, useAuthUser } from 'next-firebase-auth'
 
-export const ApartmentCard = ({ apartment }: { apartment: Apartment }) => {
+const ApartmentCard = ({ apartment }: { apartment: Apartment }) => {
   const router = useRouter();
+  const AuthUser = useAuthUser()  
 
   const navigateToApartment = (uid: string) => {
     router.push(`/apartments/${uid}`);
@@ -32,7 +34,13 @@ export const ApartmentCard = ({ apartment }: { apartment: Apartment }) => {
       </div>
       <div className={styles.apartmentCardFooter}>
         <span>{apartment.realtor}</span>
+        {
+          AuthUser.claims.role !== UserRoles.ClIENT &&
+          <span>{apartment.isRented ? 'Currently Rented' : 'Available'}</span>
+        }
       </div>
     </li>
   );
 };
+
+export default withAuthUser<{ apartment: Apartment }>()(ApartmentCard)

@@ -37,8 +37,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
   whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
 })(async ({ AuthUser, req }) => {
   const url = getAbsoluteURL("/api/apartments", req);
-  const response = await makeAuthedGetRequest(AuthUser, url); // should not fetch - just run the code here
-  
+  const response = await makeAuthedGetRequest(AuthUser, url)  
   return {
     props: {
       initialApartments: response.data.apartments,

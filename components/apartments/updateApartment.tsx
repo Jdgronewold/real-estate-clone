@@ -65,6 +65,8 @@ const UpdateApartment: React.FC<{ apartment: Apartment}> = ({ apartment }) => {
   }
 
   const onSubmit = async (data: UpdateApartmentData) => {
+    console.log(data);
+    
     const locationObject = { latLng: apartment.latLng, address: apartment.address }
     if (data.location === 'address') {
       const selected = searchBox.current.getPlaces();
@@ -91,10 +93,14 @@ const UpdateApartment: React.FC<{ apartment: Apartment}> = ({ apartment }) => {
     const form = new FormData()
     
     const finalObject = {...apartment, ...data, ...locationObject }
+    console.log(finalObject);
+    
     
     Object.keys(finalObject).forEach((key) => {
       if (key !== 'imageFile' && finalObject[key]) {        
         form.append(key, finalObject[key])
+      } else if (key === "isRented") {
+        form.append(key, finalObject[key].toString())
       }
     })
     if (data.imageFile.length) {
@@ -128,7 +134,7 @@ const UpdateApartment: React.FC<{ apartment: Apartment}> = ({ apartment }) => {
             Has been rented:
             <input
               name="isRented"
-              {...register("isRented", { required: true })}
+              {...register("isRented")}
               type="checkbox"
               defaultChecked={apartment.isRented}
               placeholder="Associated Realtor"

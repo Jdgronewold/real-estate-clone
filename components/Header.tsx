@@ -85,9 +85,6 @@ const Header = ({ email, signOut }) => {
           <div>
             <Link href="/profile">Profile</Link>
           </div>
-          <div>
-            <Link href="/profile">Saved Apartments</Link>
-          </div>
           {(user.role === UserRoles.REALTOR ||
             user.role === UserRoles.ADMIN) && (
             <div>

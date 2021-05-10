@@ -44,8 +44,11 @@ const handler = async (req, res) => {
         }))
       })
 
+      const isRented = data.isRented as unknown as string
+
       const newApartmentRef = await firebaseAdmin.database().ref('apartments').push({
-        ...data
+        ...data,
+        isRented: (isRented === 'true')
       })
       return res.status(200).send({ apartmentId: newApartmentRef.key })
       

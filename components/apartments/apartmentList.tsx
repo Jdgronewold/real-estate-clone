@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { Apartment } from "../../types";
 import styles from "./apartments.module.css";
-import { ApartmentCard } from "./apartmentCard";
+import ApartmentCard from "./apartmentCard";
 
 const ApartmentList: React.FC<{ apartments: Apartment[] }> = ({
   apartments,
