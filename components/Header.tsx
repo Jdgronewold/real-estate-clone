@@ -3,6 +3,7 @@ import Link from "next/link";
 import { slide as Menu } from "react-burger-menu";
 import { UserRoles } from "../types";
 import { UserContext } from "../state/user/user";
+import { useRouter } from 'next/router'
 
 const burgerStyles = {
   bmBurgerButton: {
@@ -71,6 +72,11 @@ const styles = {
 
 const Header = ({ email, signOut }) => {
   const { user, hasLoaded } = useContext(UserContext)
+  const router = useRouter()
+  const userSignOut = async () => {
+    await signOut()
+    router.push("/login")
+  }
   return (
     <div style={styles.container}>
       <Link href="/"><a><h1>Toptal Real Estate</h1></a></Link>

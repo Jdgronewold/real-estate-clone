@@ -1,9 +1,8 @@
 import React from 'react'
 import { AuthAction, getFirebaseAdmin, withAuthUser, useAuthUser } from 'next-firebase-auth'
-import { User, UserRoles } from '../../../types';
+import { User } from '../../../types';
 import Layout from '../../../components/layout';
 import AdminEditUser from '../../../components/user/adminEdit';
-import router from 'next/router'
 
 const EditUser: React.FC<{user: User}> = ({ user }) => {
   return (

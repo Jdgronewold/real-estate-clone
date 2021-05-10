@@ -38,7 +38,7 @@ export async function getStaticProps({ params }) {
 
   return {
     props: { apartment: { ...apartment, uid: params.uid } },
-    revalidate: 10,
+    revalidate: 1,
   };
 }
 
