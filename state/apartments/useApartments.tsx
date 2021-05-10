@@ -15,6 +15,9 @@ export const useApartments = (initialApartments: Apartment[]) => {
     ref.on("value", (snapshot) => {
       const apartmentsObject = snapshot.val();      
       if (apartmentsObject) {
+        if (!AuthUser.claims.role) {
+          debugger
+        }        
         const fetchedApartments = parseApartments(apartmentsObject, AuthUser.claims.role === UserRoles.ClIENT);
         setApartments(fetchedApartments);
       }

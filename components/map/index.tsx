@@ -6,12 +6,12 @@ import { useApartments } from "../../state/apartments/useApartments";
 import { Apartment } from "../../types";
 import { withAuthUser } from 'next-firebase-auth'
 
-const Map: React.FC<{ initialApartments: Apartment[] }> = ({
-  initialApartments,
+const Map: React.FC<{ apartments: Apartment[] }> = ({
+  apartments,
 }) => {
   const map = useRef<google.maps.Map>(null);
   const mapsApi = useRef<any>(null);
-  const apartments = useApartments(initialApartments);  
+  
 
   return (
     <div className={styles.mapRoot}>
@@ -45,4 +45,4 @@ const Map: React.FC<{ initialApartments: Apartment[] }> = ({
   );
 };
 
-export default withAuthUser<{ initialApartments: Apartment[]}>()(Map);
+export default withAuthUser<{ apartments: Apartment[]}>()(Map);
