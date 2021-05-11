@@ -9,7 +9,7 @@ import Layout from "../../components/layout";
 
 const ApartmentPage: React.FC<{ apartment: Apartment }> = ({ apartment }) => {
   const authUser =  useAuthUser()  
-  const dateString = new Date(parseInt(apartment.dateAdded as unknown as string)).toDateString()
+  const dateString = apartment ? new Date(parseInt(apartment.dateAdded as unknown as string)).toDateString() : ''
   return (
     <Layout>
       {apartment && (
