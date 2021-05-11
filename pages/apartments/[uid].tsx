@@ -18,7 +18,7 @@ const ApartmentPage: React.FC<{ apartment: Apartment }> = ({ apartment }) => {
             {
               (authUser.claims["role"] === UserRoles.ADMIN || authUser.claims["role"] === UserRoles.REALTOR) &&
               <Link href={`/apartments/update/${apartment.uid}`}>
-                <div>
+                <div data-cy="edit-apartment">
                   Edit Listing
                 </div>
               </Link>

@@ -10,7 +10,7 @@
 //
 //
 // -- This is a parent command --
-Cypress.Commands.add('signIn', (userData) => {
+Cypress.Commands.add('register', (userData) => {
   cy.get('input[name=firstName]').type(userData.firstName)
   cy.get('input[name=lastName]').type(userData.lastName)
   cy.get('input[name=email]').type(userData.email)
@@ -23,20 +23,22 @@ Cypress.Commands.add('signIn', (userData) => {
 
 Cypress.Commands.add('signOut', () => {
   cy.get('[data-cy=header-menu]', { timeout: 20000 }).should('be.visible')
-  cy.get('[data-cy=header-menu]').click()
-  cy.get('[data-cy=sign-out]').click()
+  cy.clickHeader('sign-out')
+})
+
+Cypress.Commands.add('signIn', (email, password) => {
+  cy.get('input[name=email]', { timeout: 10000}).type(email)
+  cy.get('input[name=password]').type(password)
+  cy.get('button[type=submit]').click()
+  cy.get('[data-cy=header-menu]', { timeout: 10000}).should('be.visible')
 })
 
 Cypress.Commands.add('signOutAndRemoveUserAsAdmin', (userEmail) => {
-  cy.get('[data-cy=header-menu]').click()
-  cy.get('[data-cy=sign-out]').click()
+  cy.clickHeader('sign-out')
 
-  cy.get('input[name=email]', { timeout: 10000}).type('admin@test.com')
-  cy.get('input[name=password]').type('hunter2')
-  cy.get('button[type=submit]').click()
+  cy.signIn('admin@test.com', 'hunter2')
 
-  cy.get('[data-cy=header-menu]', { timeout: 10000}).click()
-  cy.get('[data-cy=admin]', { timeout: 10000}).click()
+  cy.clickHeader('admin')
 
   cy.intercept('/api/admin/delete').as("deleteUser")
 
@@ -49,17 +51,31 @@ Cypress.Commands.add('signOutAndRemoveUserAsAdmin', (userEmail) => {
       .should('equal', '/admin');
     cy.signOut()
   })
-
 })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('clickHeader', (option) => {
+  cy.get('[data-cy=header-menu]', { timeout: 10000}).click()
+  cy.get(`[data-cy=${option}]`, { timeout: 10000}).click()
+})
+
+Cypress.Commands.add('addApartment', (apartmentData) => {
+  cy.clickHeader('new-listing')
+  cy.get('input[name=name]').type(apartmentData.name)
+  cy.get('input[name=floorSize]').type(apartmentData.floorSize)
+  cy.get('input[name=pricePerMonth]').type(apartmentData.pricePerMonth)
+  cy.get('input[name=numRooms]').type(apartmentData.numRooms)
+  cy.get('input[type="radio"]').check("geolocation")
+  cy.get('input[type="radio"]').first().click()
+  cy.get('input[value=geolocation]').should('be.checked')
+  cy.get('input[name=locationVal]').type(apartmentData.latLng)
+  cy.get('select').select(apartmentData.realtor)
+  cy.get('textarea[name=description]').type(apartmentData.description)
+
+  cy.intercept("/api/apartments/create").as("createApartment");
+
+  cy.get('button[type=submit]').click()
+
+  cy.wait('@createApartment').then((response) => {
+    expect(response.response.statusCode).to.equal(200)
+  })
+})

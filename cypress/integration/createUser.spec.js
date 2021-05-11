@@ -11,7 +11,7 @@ context("Create and Remove User", () => {
 
   it("creates a new user", () => {
     cy.intercept("/api/register").as("register");
-    cy.signIn({
+    cy.register({
       firstName: "Jeff",
       lastName: "Gronewold",
       email: "test@test.com",

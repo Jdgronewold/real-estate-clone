@@ -124,7 +124,7 @@ const UpdateApartment: React.FC<{ apartment: Apartment}> = ({ apartment }) => {
           <h1> Update Listing </h1>
         </div>
         <div className={styles.formGroup}>
-          <button onClick={onDelete}>
+          <button onClick={onDelete} data-cy="delete-apartment">
             Delete Listing
           </button>
         </div>
@@ -138,6 +138,7 @@ const UpdateApartment: React.FC<{ apartment: Apartment}> = ({ apartment }) => {
               type="checkbox"
               defaultChecked={apartment.isRented}
               placeholder="Associated Realtor"
+              data-cy="rent-apartment"
             />
           </label>
           </div>

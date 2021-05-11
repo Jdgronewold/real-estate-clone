@@ -88,7 +88,7 @@ const Header = ({ email, signOut }) => {
             </div>
             {(user.role === UserRoles.REALTOR ||
               user.role === UserRoles.ADMIN) && (
-              <div>
+              <div data-cy="new-listing">
                 <Link href="/apartments/create">Create New Listing</Link>
               </div>
             )}

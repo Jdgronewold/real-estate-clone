@@ -17,6 +17,7 @@ const ApartmentCard = ({ apartment }: { apartment: Apartment }) => {
     <li
       className={styles.apartmentCard}
       onClick={() => navigateToApartment(apartment.uid)}
+      data-cy={`apartment-card-${apartment.name}`}
     >
       <div className={styles.apartmentCardImage}>
         <Image src={apartment.imageUrl ? apartment.imageUrl : '/generic_house.png'} alt="House picture" layout='fill' objectFit='fill'/>
@@ -36,7 +37,7 @@ const ApartmentCard = ({ apartment }: { apartment: Apartment }) => {
         <span>{apartment.realtor}</span>
         {
           AuthUser.claims.role !== UserRoles.ClIENT &&
-          <span>{apartment.isRented ? 'Currently Rented' : 'Available'}</span>
+          <span data-cy="apartment-status">{apartment.isRented ? 'Currently Rented' : 'Available'}</span>
         }
       </div>
     </li>
