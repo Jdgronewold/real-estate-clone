@@ -28,6 +28,10 @@ const AdminEditUser: React.FC<{user: User}> = ({ user }) => {
   }
 
   const onSubmit = async (data: RegisterData) => {   
+    if (data.passwordOne !== data.passwordTwo) {
+      setError("Passwords do not match")
+      return
+    }
     try {
       setIsCreatingUser(true)      
       await makeAuthedPostRequest(AuthUser, '/api/admin/update', { ...data, uid: user.uid })

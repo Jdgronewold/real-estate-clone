@@ -12,6 +12,10 @@ export default function Signup() {
   const [isCreatingUser, setIsCreatingUser] = useState(false)
 
   const onSubmit = async (data: RegisterData) => {   
+    if (data.passwordOne !== data.passwordTwo) {
+      setError("Passwords do not match")
+      return
+    }
     try {
       setIsCreatingUser(true)
       await axios.post('/api/register', { ...data })

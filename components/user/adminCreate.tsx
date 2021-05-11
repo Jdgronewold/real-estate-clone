@@ -14,6 +14,10 @@ export const AdminCreateUser: React.FC = () => {
   const router = useRouter()
 
   const onSubmit = async (data: RegisterData) => {   
+    if (data.passwordOne !== data.passwordTwo) {
+      setError("Passwords do not match")
+      return
+    }
     try {
       setIsCreatingUser(true)
       await axios.post('/api/register', { ...data })
