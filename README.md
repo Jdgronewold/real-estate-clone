@@ -9,9 +9,9 @@ A seperate firebase project exists for testing purposes. To start the environmen
 
 In the test environment there are three users:
 
-Admin: admin@test.com//hunter2
-Realtor: realtor@test.com//hunter2
-Client: client@test.com//hunter2
+Admin: admin@test.com//hunter2  
+Realtor: realtor@test.com//hunter2  
+Client: client@test.com//hunter2  
 
 These users are used in various places in the tests and should not be modified. There are Cypress commands in ./cypress/support/commands that can create new users if needed.
 
