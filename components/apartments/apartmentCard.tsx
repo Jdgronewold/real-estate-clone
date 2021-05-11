@@ -37,7 +37,7 @@ const ApartmentCard = ({ apartment }: { apartment: Apartment }) => {
         <span>{apartment.realtor}</span>
         {
           AuthUser.claims.role !== UserRoles.ClIENT &&
-          <span data-cy="apartment-status">{apartment.isRented ? 'Currently Rented' : 'Available'}</span>
+          <span data-cy={`apartment-status-${apartment.name}`}>{apartment.isRented ? 'Currently Rented' : 'Available'}</span>
         }
       </div>
     </li>

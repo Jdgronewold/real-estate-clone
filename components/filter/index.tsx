@@ -33,7 +33,7 @@ export const ApartmentFilter: React.FC<ApartmentFilterProps> = ({
     <div className={styles.apartmentFilterHeader}>
       <div></div>
       <div>Filters</div>
-      <div onClick={() => setShowFilters(!showFilters)}>
+      <div onClick={() => setShowFilters(!showFilters)} data-cy="toggle-filter">
         {showFilters ? "-" : "+"}
       </div>
     </div>
@@ -43,7 +43,7 @@ export const ApartmentFilter: React.FC<ApartmentFilterProps> = ({
     >
       <div className={styles.apartmentFilter}>
         <input
-          name="minPrince"
+          name="minPrice"
           value={price.min}
           placeholder="Min Price"
           type="number"
@@ -52,7 +52,7 @@ export const ApartmentFilter: React.FC<ApartmentFilterProps> = ({
           }
         />
         <input
-          name="maxPrince"
+          name="maxPrice"
           value={price.max}
           placeholder="Max Price"
           type="number"

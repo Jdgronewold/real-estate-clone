@@ -25,14 +25,15 @@ context("Add apartment", () => {
     cy.signOut()
   })
 
-  it("creates and removes a new apartment", () => {
+  it("creates a new apartment", () => {
 
     cy.addApartment(apartmentData);
 
-    cy.location('pathname', {timeout: 10000})
+    cy.location('pathname')
     .should('equal', '/');
     
-    cy.get(`[data-cy="apartment-card-${apartmentData.name}"]`, {timeout: 10000}).should('be.visible')
+    cy.get(`[data-cy="apartment-card-${apartmentData.name}"]`).should('exist')
+    cy.get(`[data-cy="marker-${apartmentData.name}"]`).should('exist')
 
   });
 
@@ -40,23 +41,24 @@ context("Add apartment", () => {
     cy.signOut()
     cy.signIn("client@test.com", "hunter2")
 
-    cy.get(`[data-cy="apartment-card-${apartmentData.name}"]`).should('be.visible')
+    cy.get(`[data-cy="apartment-card-${apartmentData.name}"]`).should('exist')
+    cy.get(`[data-cy="marker-${apartmentData.name}"]`).should('exist')
 
     cy.signOut()
     cy.signIn("admin@test.com", "hunter2")
   })
 
   it("edits an apartment to be rented", () => {
-    cy.get(`[data-cy="apartment-card-${apartmentData.name}"]`, {timeout: 10000}).click()
-    cy.get(`[data-cy="edit-apartment"`, {timeout: 10000}).click()
+    cy.get(`[data-cy="apartment-card-${apartmentData.name}"]`).click()
+    cy.get(`[data-cy="edit-apartment"`).click()
     cy.get('[data-cy="rent-apartment"]').check()
 
     cy.get('button[type=submit]').click()
 
-    cy.location('pathname', {timeout: 10000})
+    cy.location('pathname')
     .should('equal', '/');
 
-    cy.get('[data-cy="apartment-status"').should('have.text', "Currently Rented")
+    cy.get(`[data-cy="apartment-status-${apartmentData.name}"]`).should('have.text', "Currently Rented")
   })
 
   it("should not show the rented apartment to a client", () => {
@@ -64,17 +66,34 @@ context("Add apartment", () => {
     cy.signIn("client@test.com", "hunter2")
 
     cy.get(`[data-cy="apartment-card-${apartmentData.name}"]`).should('not.exist')
+    cy.get(`[data-cy="marker-${apartmentData.name}"]`).should('not.exist')
 
     cy.signOut()
     cy.signIn("admin@test.com", "hunter2")
   })
 
+  it("filters the apartment based on price", () => {
+    cy.get('[data-cy="toggle-filter"]').click()
+    cy.wait(1000)
+    cy.get(`input[name=minPrice]`).type("2100")
+
+    cy.get(`[data-cy="apartment-card-${apartmentData.name}"]`).should('not.exist')
+    cy.get(`[data-cy="marker-${apartmentData.name}"]`).should('not.exist')
+
+    cy.get(`input[name="minPrice"]`).clear()
+    cy.get(`input[name="minPrice"]`).type("1500")
+
+    cy.get(`[data-cy="apartment-card-${apartmentData.name}"]`).should('exist')
+    cy.get(`[data-cy="marker-${apartmentData.name}"]`).should('exist')
+
+  })
+
   it("deletes the created apartment", () => {
     cy.get(`[data-cy="apartment-card-${apartmentData.name}"`).click()
-    cy.get(`[data-cy="edit-apartment"`, {timeout: 10000}).click()
-    cy.get(`[data-cy=delete-apartment]`, { timeout: 10000},).click()
+    cy.get(`[data-cy="edit-apartment"`).click()
+    cy.get(`[data-cy=delete-apartment]`).click()
 
-    cy.location('pathname', {timeout: 10000})
+    cy.location('pathname')
     .should('equal', '/');
 
     cy.get(`[data-cy="apartment-card-${apartmentData.name}"]`).should('not.exist')

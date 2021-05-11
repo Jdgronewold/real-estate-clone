@@ -12,7 +12,7 @@ interface MarkerProps {
 export const Marker = ({ apartment }: MarkerProps) => {
   return (
     <Link href={`/apartments/${apartment.uid}`}>
-      <div className={styles.marker}>
+      <div className={styles.marker} data-cy={`marker-${apartment.name}`}>
         { apartment.pricePerMonth}
       </div>
     </Link>
