@@ -54,8 +54,10 @@ Cypress.Commands.add('signOutAndRemoveUserAsAdmin', (userEmail) => {
 })
 
 Cypress.Commands.add('clickHeader', (option) => {
+  cy.wait(1000)
   cy.get('[data-cy=header-menu]').click()
-  cy.get(`[data-cy=${option}]`).click()
+  cy.wait(1000)
+  cy.get(`[data-cy=${option}]`).click({ waitForAnimations: true})
 })
 
 Cypress.Commands.add('addApartment', (apartmentData) => {
