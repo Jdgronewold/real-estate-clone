@@ -44,6 +44,11 @@
   color: grey;
 }
 
+.apartmentDisplayBodyHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
 .apartmentDisplayBody > div {
   padding: 10px 0;
 }

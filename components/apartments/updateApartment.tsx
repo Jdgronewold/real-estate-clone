@@ -153,6 +153,16 @@ const UpdateApartment: React.FC<{ apartment: Apartment}> = ({ apartment }) => {
           </div>
           <div className={styles.formGroup}>
             <input
+              name="dateAdded"
+              {...register("dateAdded", { required: true })}
+              type="text"
+              defaultValue={new Date(parseInt(apartment.dateAdded as unknown as string)).toDateString()}
+              placeholder="Date Added"
+              disabled
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <input
               name="floorSize"
               {...register("floorSize", { required: true })}
               type="number"

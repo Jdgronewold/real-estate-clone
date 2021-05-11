@@ -9,6 +9,7 @@ import Layout from "../../components/layout";
 
 const ApartmentPage: React.FC<{ apartment: Apartment }> = ({ apartment }) => {
   const authUser =  useAuthUser()  
+  const dateString = new Date(parseInt(apartment.dateAdded as unknown as string)).toDateString()
   return (
     <Layout>
       {apartment && (
@@ -36,7 +37,7 @@ const ApartmentPage: React.FC<{ apartment: Apartment }> = ({ apartment }) => {
             />
           </div>
           <div className={styles.apartmentDisplayBody}>
-            <div>{apartment.address}</div>
+            <div className={styles.apartmentDisplayBodyHeader}><span>{apartment.address}</span> <span>Date Added: {dateString}</span></div>
             <div className={styles.apartmentDisplayTitle}>
               {apartment.name}
             </div>
