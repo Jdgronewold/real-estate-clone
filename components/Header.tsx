@@ -83,9 +83,6 @@ const Header = ({ email, signOut }) => {
       {user && email ? (
         <div data-cy="header-menu">
           <Menu styles={burgerStyles} right>
-            <div>
-              <Link href="/profile">Profile</Link>
-            </div>
             {(user.role === UserRoles.REALTOR ||
               user.role === UserRoles.ADMIN) && (
               <div data-cy="new-listing">
