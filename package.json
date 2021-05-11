@@ -5,10 +5,12 @@
   "scripts": {
     "dev": "next dev",
     "dev:test": "NODE_ENV='test' next dev",
-    "build": "next build",
+    "build:test": "NODE_ENV='test' next build",
+    "start:test": "NODE_ENV='test' next start",
     "start": "next start",
-    "test": "NODE_ENV='test' next build",
-    "cypress:open": "cypress open"
+    "cy:open": "cypress open",
+    "cy:run": "cypress run --browser chrome",
+    "test": "yarn build:test && start-server-and-test start:test http://localhost:3000 cy:run"
   },
   "dependencies": {
     "@cloudinary/base": "^1.0.0-beta.2",
@@ -35,6 +37,7 @@
     "@types/node": "^15.0.1",
     "@types/react": "^17.0.4",
     "cypress": "^7.2.0",
+    "start-server-and-test": "^1.12.1",
     "typescript": "^4.2.4"
   }
 }

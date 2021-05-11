@@ -27,10 +27,10 @@ Cypress.Commands.add('signOut', () => {
 })
 
 Cypress.Commands.add('signIn', (email, password) => {
-  cy.get('input[name=email]', { timeout: 10000}).type(email)
+  cy.get('input[name=email]').type(email)
   cy.get('input[name=password]').type(password)
   cy.get('button[type=submit]').click()
-  cy.get('[data-cy=header-menu]', { timeout: 10000}).should('be.visible')
+  cy.get('[data-cy=header-menu]', { timeout: 30000 }).should('be.visible')
 })
 
 Cypress.Commands.add('signOutAndRemoveUserAsAdmin', (userEmail) => {
@@ -42,20 +42,20 @@ Cypress.Commands.add('signOutAndRemoveUserAsAdmin', (userEmail) => {
 
   cy.intercept('/api/admin/delete').as("deleteUser")
 
-  cy.get(`[data-cy='${userEmail}']`, { timeout: 10000}).click()
-  cy.get(`[data-cy=delete-user]`, { timeout: 10000},).click()
+  cy.get(`[data-cy='${userEmail}']`).click()
+  cy.get(`[data-cy=delete-user]`).click()
 
   cy.wait('@deleteUser').then((response) => {
     expect(response.response.statusCode).to.equal(200)
-    cy.location('pathname', {timeout: 10000})
+    cy.location('pathname')
       .should('equal', '/admin');
     cy.signOut()
   })
 })
 
 Cypress.Commands.add('clickHeader', (option) => {
-  cy.get('[data-cy=header-menu]', { timeout: 10000}).click()
-  cy.get(`[data-cy=${option}]`, { timeout: 10000}).click()
+  cy.get('[data-cy=header-menu]').click()
+  cy.get(`[data-cy=${option}]`).click()
 })
 
 Cypress.Commands.add('addApartment', (apartmentData) => {

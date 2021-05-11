@@ -14,7 +14,13 @@ export default function Login() {
 
   const onSubmit = async (data: LoginData) => {
 
-    const authUser = await app.auth().signInWithEmailAndPassword(data.email, data.password)
+    try {
+      const authUser = await app.auth().signInWithEmailAndPassword(data.email, data.password)
+    } catch (e) {
+      alert(e)
+      
+    }
+    
     
   }
 

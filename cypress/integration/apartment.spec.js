@@ -41,6 +41,9 @@ context("Add apartment", () => {
     cy.signOut()
     cy.signIn("client@test.com", "hunter2")
 
+    cy.location('pathname')
+    .should('equal', '/');
+
     cy.get(`[data-cy="apartment-card-${apartmentData.name}"]`).should('exist')
     cy.get(`[data-cy="marker-${apartmentData.name}"]`).should('exist')
 
