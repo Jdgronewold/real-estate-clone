@@ -81,27 +81,29 @@ const Header = ({ email, signOut }) => {
     <div style={styles.container}>
       <Link href="/"><a><h1>Toptal Real Estate</h1></a></Link>
       {user && email ? (
-        <Menu styles={burgerStyles} right>
-          <div>
-            <Link href="/profile">Profile</Link>
-          </div>
-          {(user.role === UserRoles.REALTOR ||
-            user.role === UserRoles.ADMIN) && (
+        <div data-cy="header-menu">
+          <Menu styles={burgerStyles} right>
             <div>
-              <Link href="/apartments/create">Create New Listing</Link>
+              <Link href="/profile">Profile</Link>
             </div>
-          )}
-          {
-            user.role === UserRoles.ADMIN &&
-            <div>
-              <Link href="/admin/create-user">Create New User</Link>
+            {(user.role === UserRoles.REALTOR ||
+              user.role === UserRoles.ADMIN) && (
+              <div>
+                <Link href="/apartments/create">Create New Listing</Link>
+              </div>
+            )}
+            {
+              user.role === UserRoles.ADMIN &&
+              <div data-cy="admin">
+                <Link href="/admin">Admin</Link>
+              </div>
+            }
+            <div style={styles.button} onClick={userSignOut} data-cy="sign-out">
+              {" "}
+              Sign Out
             </div>
-          }
-          <div style={styles.button} onClick={() => signOut()}>
-            {" "}
-            Sign Out
-          </div>
-        </Menu>
+          </Menu>
+        </div>
       ) : (
         <Link href="/login">
           <a>

@@ -47,7 +47,7 @@ const AdminEditUser: React.FC<{user: User}> = ({ user }) => {
           <h1> Edit User </h1>
         </div>
         <div className={styles.formGroup}>
-          <button onClick={deleteUser}>
+          <button onClick={deleteUser} data-cy='delete-user'>
             Delete User
           </button>
         </div>

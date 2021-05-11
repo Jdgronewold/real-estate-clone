@@ -9,10 +9,6 @@ import Link from 'next/link'
 
 
 const AdminPage: React.FC<{ users: { uid: string, email: string}[]}> = ({ users}) => {
-  
-  const deleteUser = (uid: string) => {
-
-  }
 
   return (
     <Layout>
@@ -27,8 +23,8 @@ const AdminPage: React.FC<{ users: { uid: string, email: string}[]}> = ({ users}
             {
               users.map((user) => {
                 return (
-                  <div className={styles.adminUser}>
-                    <Link href={`/admin/edit/${user.uid}`}><span className={styles.adminUserDisplay}>{user.email}</span></Link>
+                  <div className={styles.adminUser} key={user.uid}>
+                    <Link href={`/admin/edit/${user.uid}`}><span className={styles.adminUserDisplay} data-cy={user.email}>{user.email}</span></Link>
                   </div>
                 )
               })

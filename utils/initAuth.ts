@@ -5,7 +5,6 @@ import 'firebase/database'
 const TWELVE_DAYS_IN_MS = 12 * 60 * 60 * 24 * 1000
 
 const initAuth = () => {  
-  console.log(process.env.NEXT_PUBLIC_FIREBASE_PUBLIC_API_KEY);
   
   init({
     authPageURL: '/login',
