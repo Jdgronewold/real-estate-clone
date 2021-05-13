@@ -79,7 +79,7 @@ const Header = ({ email, signOut }) => {
   }
   return (
     <div style={styles.container}>
-      <Link href="/"><a><h1>Toptal Real Estate</h1></a></Link>
+      <Link href="/"><a><h1>Real Estate</h1></a></Link>
       {user && email ? (
         <div data-cy="header-menu">
           <Menu styles={burgerStyles} right>

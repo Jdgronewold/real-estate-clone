@@ -1,4 +1,4 @@
-Toptal Real Estate App
+Real Estate App
 
 To run in dev:
 `npm run dev` or `yarn dev`
@@ -19,5 +19,5 @@ Currently happy paths are tested, more is needed around the edges.
 
 The production app is available at:
 
-https://toptal-real-estate-52zwezeqv-jdgronewold.vercel.app
+
 

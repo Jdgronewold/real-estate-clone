@@ -75,7 +75,7 @@ const Home: React.FC<{ initialApartments: Apartment[] }> = ({ initialApartments 
     <Layout>
       <div className={styles.container}>
         <Head>
-          <title>Toptal Real Estate</title>
+          <title>Real Estate</title>
         </Head>
         <Map apartments={filteredApartments}/>
         <div className={styles.apartments}>

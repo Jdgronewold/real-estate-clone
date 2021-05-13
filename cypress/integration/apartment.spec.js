@@ -17,7 +17,7 @@ context("Add apartment", () => {
       numRooms: 3,
       latLng: "40.0150, -105.2705",
       description: "Hello",
-      realtor: "Toptal Realtor"
+      realtor: "Realtor"
     }
   })
 
